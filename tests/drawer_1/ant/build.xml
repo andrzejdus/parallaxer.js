@@ -4,8 +4,8 @@
   <target name="debug-build-deps" depends="" description="Build debug dependences">
     <exec dir="." executable="${closure.dir}/bin/build/depswriter.py" output="src/js_generated/deps.js" failonerror="true">
       <arg value="--root_with_prefix=src/js js" />
-      <arg value="--root_with_prefix=../../../../libs-andrzejdus/utils/src/ ../../../../../libs-andrzejdus/utils/src" />
-      <arg value="--root_with_prefix=../../../../libs-andrzejdus/parallaxer.js/src/ ../../../../../libs-andrzejdus/parallaxer.js/src" />
+      <arg value="--root_with_prefix=../../../../libs-andrzejdus/utils/src/ ../../../../libs-andrzejdus/utils/src" />
+      <arg value="--root_with_prefix=../../../../libs-andrzejdus/parallaxer.js/src/ ../../../../libs-andrzejdus/parallaxer.js/src" />
     </exec>
   </target>
 </project>
