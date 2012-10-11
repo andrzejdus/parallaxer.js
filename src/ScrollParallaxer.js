@@ -234,8 +234,9 @@ var ScrollParallaxer = function() {
       }
       
       object['initialVisiblePosition'] = initialVisiblePosition;
+      Log.l(object.id);
 
-      object.drawerObjectId = drawer.addObject(element, object.type == ParallaxerGroup.HORIZONTAL ? 'left' : 'top', 0);
+      drawer.addObject(object.id, element, object.type == ParallaxerGroup.HORIZONTAL ? 'left' : 'top', 0);
     }
   };
 
@@ -248,7 +249,7 @@ var ScrollParallaxer = function() {
           (object.scrollOffset - newScrollPosition) * object.speed
       );
       
-      drawer.updateOffset(object.element, offset);
+      drawer.updateOffset(object.id, offset);
     }
   };
 

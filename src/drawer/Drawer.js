@@ -23,50 +23,46 @@ var Drawer = function() {
     });
   });
 
-  this.addObject = function(element, type, offset) {
-    var id = stateObjects.length;
-    console.log(id);
-
+  this.addObject = function(id, element, type, offset) {
     stateObjects[id] = new DrawerObject(element, type, offset);
     screenObjects[id] = new DrawerObject(element, type, offset);
     
     stateObjectsToRedraw = {};
-
-    return id;
+    console.log(stateObjects);
   };
 
   this.startFrame = function() {
     stateObjectsToRedraw = {};
   };
 
-  this.updateOffset = function(name, newOffset) {
-    var stateObject = stateObjects[name];
-    if (!stateObject) {
+  this.updateOffset = function(id, newOffset) {
+    var stateObject = stateObjects[id];
+    if (stateObject) {
       stateObject.setOffset(newOffset);
       stateObject.updateVisibility(
           visibilityChecker.isVisible(stateObject.getOffset(), heightsCache.get(stateObject.element))
       );
 
-      var screenObject = screenObjects[name];
+      var screenObject = screenObjects[id];
 
-      if (isRedrawNeeded(stateObject, screenObject, name)) {
-        stateObjectsToRedraw[name] = stateObject;
+      if (isRedrawNeeded(stateObject, screenObject, id)) {
+        stateObjectsToRedraw[id] = stateObject;
       }
     }
     else {
-      console.error('Unknown object id');
+      console.error('Unknown object id ' + id);
     }
   };
   
   this.draw = Utils.delegate(this, function() {
-    for (var name in stateObjectsToRedraw) {
-      var stateObject = stateObjectsToRedraw[name];
+    for (var id in stateObjectsToRedraw) {
+      var stateObject = stateObjectsToRedraw[id];
       
       var element = stateObject.getElement();
       
       if (element) {
         if (isHardwareTransformEnabled) {
-          element.style[transformPropertyName] =
+          element.style[transformPropertyid] =
               'translate' +
               (stateObject.getType() === 'left' ? 'X' : 'Y') +
               '(' + stateObject.getOffset() + 'px)'; 
@@ -76,13 +72,13 @@ var Drawer = function() {
         }
       }
 
-      var screenObject = screenObjects[name];
+      var screenObject = screenObjects[id];
       updateScreenObject(screenObject, stateObject);
     }
   });
 
-  // TODO remove name
-  var isRedrawNeeded = function(stateObject, screenObject, name) {
+  // TODO remove id
+  var isRedrawNeeded = function(stateObject, screenObject, id) {
     var hasVisibilityChanged = stateObject.isVisible() != screenObject.isVisible();
     var hasOffsetChanged = stateObject.getOffset() != screenObject.getOffset(); 
 
@@ -93,15 +89,15 @@ var Drawer = function() {
         stateObject.getType() === 'left';
 
     // TODO remove before release
-    if (false && name === '.page0 .layer.starsBack') {
+    if (false && id === '.page0 .layer.starsBack') {
       console.log(stateObject.isVisible() + '!=' + screenObject.isVisible());
       console.log(stateObject.getOffset() + '!=' + screenObject.getOffset());
       console.log(isRedrawNeededValue);
     }
 
-    return isRedrawNeededValue;
+    //return isRedrawNeededValue;
 
-    //return true;
+    return true;
   };
 
   var updateScreenObject = function(screenObject, stateObject) {
