@@ -1,0 +1,3 @@
+[submodule "libs/utils.js"]
+	path = libs/utils.js
+	url = https://github.com/andrzejdus/utils.js.git
