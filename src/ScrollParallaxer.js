@@ -1,7 +1,6 @@
 goog.provide('andrzejdus.parallaxer.ScrollParallaxer');
 
 goog.require('andrzejdus.parallaxer.ScrollParallaxerEvent');
-goog.require('andrzejdus.parallaxer.ScrollParallaxerOrientation');
 goog.require('andrzejdus.parallaxer.drawer.Drawer');
 goog.require('andrzejdus.utils.AnimationFrame');
 goog.require('andrzejdus.utils.Log');
