@@ -18,8 +18,7 @@ var Drawer = function() {
   var visibilityChecker = new VisibilityChecker();
   
   var construct = Utils.delegate(this, function() {
-    heightsCache = new Cache(function(element) {
-      return Number($(element).css('height').replace(/px$/, ''));
+    heightsCache = new Cache(function onCacheCreate(element) {
     });
   });
 
@@ -39,8 +38,11 @@ var Drawer = function() {
     var stateObject = stateObjects[id];
     if (stateObject) {
       stateObject.setOffset(newOffset);
+      var element = stateObject.getElement();
+      console.log(element);
       stateObject.updateVisibility(
-          visibilityChecker.isVisible(stateObject.getOffset(), heightsCache.get(stateObject.element))
+          visibilityChecker.isVisible(
+            stateObject.getOffset(), heightsCache.get(element))
       );
 
       var screenObject = screenObjects[id];
@@ -62,7 +64,8 @@ var Drawer = function() {
       
       if (element) {
         if (isHardwareTransformEnabled) {
-          element.style[transformPropertyid] =
+          console.log(element.style);
+          element.style[transformPropertyName] =
               'translate' +
               (stateObject.getType() === 'left' ? 'X' : 'Y') +
               '(' + stateObject.getOffset() + 'px)'; 

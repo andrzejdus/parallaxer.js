@@ -27,3 +27,6 @@ var DrawerObject = function(element, type, offset) {
     isVisibleValue = value;
   };
 };
+
+DrawerObject.HORIZONTAL = 'horizontal';
+DrawerObject.VERTICAL = 'vertical';

@@ -1,6 +1,7 @@
 goog.provide('andrzejdus.parallaxer.ScrollParallaxer');
 
 goog.require('andrzejdus.parallaxer.ScrollParallaxerEvent');
+goog.require('andrzejdus.parallaxer.ScrollParallaxerOrientation');
 goog.require('andrzejdus.parallaxer.drawer.Drawer');
 goog.require('andrzejdus.utils.AnimationFrame');
 goog.require('andrzejdus.utils.Log');
@@ -64,7 +65,7 @@ var ScrollParallaxer = function() {
           'id': objects.length,
           'element': element,
           'speed': speed,
-          'type': type,
+          'type': type === ScrollParallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
           'scrollOffset': scrollOffset
       };
       
@@ -227,16 +228,17 @@ var ScrollParallaxer = function() {
       var element = object.element;
 
       var initialVisiblePosition = 0;
-      var elementCssPosition = element.css(object.type == ParallaxerGroup.HORIZONTAL ? 'left' : 'top');
+      var elementCssPosition = element.style[object.type == DrawerObject.HORIZONTAL ? 'left' : 'top'];
       if (elementCssPosition !== 'auto') {
+        console.log(elementCssPosition);
         initialVisiblePosition += Number(elementCssPosition.replace(/px/, ''));
-        element.css(object.type == ParallaxerGroup.HORIZONTAL ? 'left' : 'top', '0');
+        element.style[object.type == DrawerObject.HORIZONTAL ? 'left' : 'top'] = '0';
       }
       
       object['initialVisiblePosition'] = initialVisiblePosition;
       Log.l(object.id);
 
-      drawer.addObject(object.id, element, object.type == ParallaxerGroup.HORIZONTAL ? 'left' : 'top', 0);
+      drawer.addObject(object.id, element, object.type == DrawerObject.HORIZONTAL ? 'left' : 'top', 0);
     }
   };
 
@@ -255,6 +257,7 @@ var ScrollParallaxer = function() {
 
   var onScroll = Utils.delegate(this, function() {
     targetScrollPosition = getScrollPosition(); 
+    console.log(targetScrollPosition);
    
     eventsManager.dispatch(ScrollParallaxerEvent.TARGET_POSITION_CHANGED, new ScrollParallaxerEvent('scroll', targetScrollPosition));
   
@@ -275,3 +278,6 @@ var ScrollParallaxer = function() {
   
   construct();
 };
+
+ScrollParallaxer.HORIZONTAL = 'horizontal';
+ScrollParallaxer.VERTICAL = 'vertical';
