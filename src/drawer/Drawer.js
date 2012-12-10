@@ -27,7 +27,7 @@ var Drawer = function() {
     screenObjects[id] = new DrawerObject(element, type, offset);
     
     stateObjectsToRedraw = {};
-    console.log(stateObjects);
+    //console.log(stateObjects);
   };
 
   this.startFrame = function() {
@@ -39,7 +39,7 @@ var Drawer = function() {
     if (stateObject) {
       stateObject.setOffset(newOffset);
       var element = stateObject.getElement();
-      console.log(element);
+      //console.log(element);
       stateObject.updateVisibility(
           visibilityChecker.isVisible(
             stateObject.getOffset(), heightsCache.get(element))
@@ -64,7 +64,7 @@ var Drawer = function() {
       
       if (element) {
         if (isHardwareTransformEnabled) {
-          console.log(element.style);
+          //console.log(element.style);
           element.style[transformPropertyName] =
               'translate' +
               (stateObject.getType() === 'left' ? 'X' : 'Y') +

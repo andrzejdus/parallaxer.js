@@ -227,15 +227,13 @@ var ScrollParallaxer = function() {
       var element = object.element;
 
       var initialVisiblePosition = 0;
-      var elementCssPosition = element.style[object.type == DrawerObject.HORIZONTAL ? 'left' : 'top'];
+      var elementCssPosition = Utils.getComputedStyle(element, object.type == DrawerObject.HORIZONTAL ? 'left' : 'top');
       if (elementCssPosition !== 'auto') {
-        console.log(elementCssPosition);
         initialVisiblePosition += Number(elementCssPosition.replace(/px/, ''));
         element.style[object.type == DrawerObject.HORIZONTAL ? 'left' : 'top'] = '0';
       }
       
       object['initialVisiblePosition'] = initialVisiblePosition;
-      Log.l(object.id);
 
       drawer.addObject(object.id, element, object.type == DrawerObject.HORIZONTAL ? 'left' : 'top', 0);
     }

@@ -10,7 +10,6 @@ var VisibilityChecker = function() {
   });
 
   this.isVisible = function(top, bottom) {
-    //console.log(top + "/" + bottom);
     var isVisible = false;
 
     if ((top >= windowTop && top <= windowBottom)  ||
@@ -29,7 +28,6 @@ var VisibilityChecker = function() {
   var updateWindowBounds = function() {
     windowTop = 0;
     windowBottom = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
-    console.log(windowBottom);
   };
   
   construct();
