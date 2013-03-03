@@ -69,7 +69,7 @@ var ScrollParallaxer = function() {
           'id': objects.length,
           'element': element,
           'speed': speed,
-          'type': type === ScrollParallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
+          'type': type,
           'scrollOffset': scrollOffset
       };
       
@@ -144,15 +144,22 @@ var ScrollParallaxer = function() {
       var element = object.element;
 
       var initialVisiblePosition = 0;
-      var elementCssPosition = Utils.getComputedStyle(element, object.type == DrawerObject.HORIZONTAL ? 'left' : 'top');
+      var elementCssPosition =
+          Utils.getComputedStyle(element, object.type == ScrollParallaxer.HORIZONTAL ? 'left' : 'top');
       if (elementCssPosition !== 'auto') {
         initialVisiblePosition += Number(elementCssPosition.replace(/px/, ''));
-        element.style[object.type == DrawerObject.HORIZONTAL ? 'left' : 'top'] = '0';
+        element.style[object.type == ScrollParallaxer.HORIZONTAL ? 'left' : 'top'] = '0';
       }
       
       object['initialVisiblePosition'] = initialVisiblePosition;
 
-      drawer.addObject(object.id, element, object.type == DrawerObject.HORIZONTAL ? 'left' : 'top', 0);
+      console.log(object.type);
+      drawer.addObject(
+          object.id,
+          element,
+          object.type === ScrollParallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
+          0
+      );
     }
   };
 
