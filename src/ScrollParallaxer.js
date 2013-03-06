@@ -7,11 +7,6 @@ goog.require('andrzejdus.utils.Log');
 goog.require('andrzejdus.utils.Utils');
 goog.require('andrzejdus.utils.events.EventsManager');
 
-/* TODO
- * - events
- * - pass element to add instead of name
-*/
-
 /** @constructor */
 var ScrollParallaxer = function() {
   var eventsManager = null;
@@ -125,13 +120,15 @@ var ScrollParallaxer = function() {
   };
 
   this.setTargetScrollPosition = function(value) {
-    if (targetScrollPosition !== value) {
-      targetScrollPosition = value;
-      
-      setScrollPosition(targetScrollPosition);
+    if (document.body && document.body.scrollTop) {
+      document.body.scrollTop = value;
+//      document.getElementsByTagName('body')[0].scrollTop = value;
+    }
+    else {
+      document.documentElement.scrollTop = value;
     }
   };
-  
+
   /*
    *
    * Private methods
@@ -153,7 +150,6 @@ var ScrollParallaxer = function() {
       
       object['initialVisiblePosition'] = initialVisiblePosition;
 
-      console.log(object.type);
       drawer.addObject(
           object.id,
           element,
@@ -248,22 +244,20 @@ var ScrollParallaxer = function() {
       drawer.updateOffset(object.id, offset);
     }
   };
-  
-  var getScrollPosition = function() {
-    return window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop;
-  };
-  
-  var setScrollPosition = function(value) {
-    document.getElementsByTagName('body')[0].scrollTop = value;
-  };
-  
+
   var onScroll = Utils.delegate(this, function() {
-    targetScrollPosition = getScrollPosition(); 
-   
-    eventsManager.dispatch(ScrollParallaxerEvent.TARGET_POSITION_CHANGED,
-        new ScrollParallaxerEvent('scroll', targetScrollPosition));
-  
-    startLoop();
+    var value = (document.body && document.body.scrollTop) ?
+        document.body.scrollTop :
+        document.documentElement.scrollTop;
+
+    if (targetScrollPosition !== value) {
+      targetScrollPosition = value;
+
+      eventsManager.dispatch(ScrollParallaxerEvent.TARGET_POSITION_CHANGED,
+          new ScrollParallaxerEvent('scroll', targetScrollPosition));
+
+      startLoop();
+    }
   });
   
   var onResize = function() {
