@@ -46,14 +46,26 @@ var ScrollParallaxer = function(initialScrollPosition) {
    *
    */
 
-  this.addEventListener = function(type, target) {
-    eventsManager.addEventListener(type, target);
+  /*
+   * Registers event listener for given event type.
+   */
+  this.addEventListener = function(type, listener) {
+    eventsManager.addEventListener(type, listener);
   };
 
-  this.removeEventListener = function(type, target) {
-    eventsManager.removeEventListener(type, target);
+  /*
+   * Unregisters given event listener for given event type.
+   */
+  this.removeEventListener = function(type, listener) {
+    eventsManager.removeEventListener(type, listener);
   };
 
+  /*
+   * Registers DOM element to be scrolled by parallaxer.
+   *
+   * Arguments control scrolling parameters for element.
+   */
+  // TODO rename to addElement
   this.add = function(element, speed, scrollOffset, type) {
     var object = null;
 
@@ -72,6 +84,12 @@ var ScrollParallaxer = function(initialScrollPosition) {
     return object;
   };
 
+  /*
+   * Initializes parallaxer and draws registered elements for the first time.
+   *
+   * After calling this function parallaxer can be started and stopped.
+   */
+  // TODO rename to initialize
   this.init = function() {
     initObjects();
 
@@ -80,7 +98,10 @@ var ScrollParallaxer = function(initialScrollPosition) {
     eventsManager.dispatch(ScrollParallaxerEvent.AFTER_FIRST_DRAW,
             new ScrollParallaxerEvent('draw', currentScrollPosition));
   };
-  
+
+  /*
+   * Starts parallaxer.
+   */
   this.start = function() {
     if (isStarted === false) {
       isStarted = true;
@@ -91,7 +112,10 @@ var ScrollParallaxer = function(initialScrollPosition) {
       onScroll();
     }
   };
-  
+
+  /*
+   * Stops parallaxer.
+   */
   this.stop = function() {
     if (isStarted === true) {
       isStarted = false;
@@ -101,22 +125,37 @@ var ScrollParallaxer = function(initialScrollPosition) {
     }
   };
 
+  /*
+   * Returns current smooth scroll state.
+   */
   this.getIsSmoothScrollEnabled = function() {
     return isSmoothScrollEnabled;
   };
-  
+
+  /*
+   * Enables or disables smooth scroll.
+   */
   this.setIsSmoothScrollEnabled = function(value) {
     isSmoothScrollEnabled = value;
   };
-  
+
+  /*
+   * Gets current scroll position, i.e. position on which registered elements were last drawn.
+   */
   this.getCurrentScrollPosition = function() {
     return currentScrollPosition;
   };
-  
+
+  /*
+   * Gets target scroll position, i.e. position to which elements are scrolled.
+   */
   this.getTargetScrollPosition = function() {
     return targetScrollPosition;
   };
 
+  /*
+   * Sets target scroll position, i.e. position to which elements are scrolled.
+   */
   this.setTargetScrollPosition = function(value) {
     if (document.body !== undefined &&
         document.body.scrollTop != undefined) {
@@ -209,7 +248,7 @@ var ScrollParallaxer = function(initialScrollPosition) {
   var onLoopFrame = function(deltaTime) {
     var hasChanged = draw(deltaTime, false);
 
-    // stop loop if nothing has changed in last frame
+    // stops loop if nothing has changed in last frame
     if (hasChanged === false) {
       looper.stop();
     }
