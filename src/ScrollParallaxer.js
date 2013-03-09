@@ -102,7 +102,7 @@ var ScrollParallaxer = function() {
       $(window).off('resize', onResize);
     }
   };
-  
+
   this.getIsSmoothScrollEnabled = function() {
     return isSmoothScrollEnabled;
   };
@@ -120,9 +120,9 @@ var ScrollParallaxer = function() {
   };
 
   this.setTargetScrollPosition = function(value) {
-    if (document.body && document.body.scrollTop) {
+    if (document.body !== undefined &&
+        document.body.scrollTop != undefined) {
       document.body.scrollTop = value;
-//      document.getElementsByTagName('body')[0].scrollTop = value;
     }
     else {
       document.documentElement.scrollTop = value;
@@ -246,9 +246,10 @@ var ScrollParallaxer = function() {
   };
 
   var onScroll = Utils.delegate(this, function() {
-    var value = (document.body && document.body.scrollTop) ?
-        document.body.scrollTop :
-        document.documentElement.scrollTop;
+    var value = 
+      (document.body !== undefined && document.body.scrollTop !== undefined) ?
+          document.body.scrollTop :
+          document.documentElement.scrollTop;
 
     if (targetScrollPosition !== value) {
       targetScrollPosition = value;
@@ -263,7 +264,7 @@ var ScrollParallaxer = function() {
   var onResize = function() {
     draw(0, true);
   };
-  
+
   construct();
 };
 
