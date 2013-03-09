@@ -12,7 +12,6 @@ var ScrollParallaxer = function(initialScrollPosition) {
   var eventsManager = null;
 
   var isStarted = null;
-  var isFirstDraw = null;
   var isLoopRunning = null;
 
   var currentScrollPosition = null;
@@ -36,9 +35,7 @@ var ScrollParallaxer = function(initialScrollPosition) {
     eventsManager.registerType(ScrollParallaxerEvent.AFTER_FIRST_DRAW);
     
     isStarted = false;
-    isFirstDraw = true;
     isLoopRunning = false;
-
 
     isSmoothScrollEnabled = false;
   });
