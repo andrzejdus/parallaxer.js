@@ -8,7 +8,7 @@ goog.require('andrzejdus.utils.Utils');
 goog.require('andrzejdus.utils.events.EventsManager');
 
 /** @constructor */
-var ScrollParallaxer = function() {
+var ScrollParallaxer = function(initialScrollPosition) {
   var eventsManager = null;
 
   var isStarted = null;
@@ -27,6 +27,9 @@ var ScrollParallaxer = function() {
   var drawer = new Drawer(); 
   
   var construct = Utils.delegate(this, function() {
+    currentScrollPosition = initialScrollPosition;
+    targetScrollPosition = initialScrollPosition;
+
     eventsManager = new EventsManager();
     eventsManager.registerType(ScrollParallaxerEvent.CURRENT_POSITION_CHANGED);
     eventsManager.registerType(ScrollParallaxerEvent.TARGET_POSITION_CHANGED);
@@ -36,9 +39,7 @@ var ScrollParallaxer = function() {
     isFirstDraw = true;
     isLoopRunning = false;
 
-    currentScrollPosition = -675 * 1000 / 450;
-    targetScrollPosition = currentScrollPosition;
-    
+
     isSmoothScrollEnabled = false;
   });
   
