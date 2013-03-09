@@ -2,7 +2,7 @@ goog.provide('andrzejdus.parallaxer.ScrollParallaxer');
 
 goog.require('andrzejdus.parallaxer.ScrollParallaxerEvent');
 goog.require('andrzejdus.parallaxer.drawer.Drawer');
-goog.require('andrzejdus.utils.AnimationFrame');
+goog.require('andrzejdus.utils.RequestAnimationFrame');
 goog.require('andrzejdus.utils.Log');
 goog.require('andrzejdus.utils.Utils');
 goog.require('andrzejdus.utils.events.EventsManager');
@@ -21,9 +21,7 @@ var ScrollParallaxer = function(initialScrollPosition) {
   
   var objects = []; 
 
-  var requestAnimationFrameFunction = new AnimationFrame().getRequestFunction();
-
-  var drawer = new Drawer(); 
+  var drawer = new Drawer();
   
   var construct = Utils.delegate(this, function() {
     currentScrollPosition = initialScrollPosition;
@@ -174,7 +172,7 @@ var ScrollParallaxer = function(initialScrollPosition) {
           
           deltaTime = time - lastTime;
 
-          requestAnimationFrameFunction(loop);
+          requestAnimationFrame(loop);
 
           var hasChanged = draw(deltaTime, false); 
 
