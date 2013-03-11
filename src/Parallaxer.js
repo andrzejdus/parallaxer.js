@@ -1,6 +1,6 @@
-goog.provide('andrzejdus.parallaxer.ScrollParallaxer');
+goog.provide('andrzejdus.parallaxer.Parallaxer');
 
-goog.require('andrzejdus.parallaxer.ScrollParallaxerEvent');
+goog.require('andrzejdus.parallaxer.ParallaxerEvent');
 goog.require('andrzejdus.parallaxer.drawer.Drawer');
 goog.require('andrzejdus.utils.RequestAnimationFrame');
 goog.require('andrzejdus.utils.Log');
@@ -9,10 +9,10 @@ goog.require('andrzejdus.utils.Utils');
 goog.require('andrzejdus.utils.events.EventsManager');
 
 /** @constructor */
-var ScrollParallaxer = function(initialScrollPosition) {
+var Parallaxer = function(initialScrollPosition) {
   var eventsManager = null;
 
-  var isStarted = null;
+  var areAllElementsInitialized = null;
 
   var currentScrollPosition = null;
   var targetScrollPosition = null;
@@ -29,11 +29,11 @@ var ScrollParallaxer = function(initialScrollPosition) {
     targetScrollPosition = initialScrollPosition;
 
     eventsManager = new EventsManager();
-    eventsManager.registerType(ScrollParallaxerEvent.CURRENT_POSITION_CHANGED);
-    eventsManager.registerType(ScrollParallaxerEvent.TARGET_POSITION_CHANGED);
-    eventsManager.registerType(ScrollParallaxerEvent.AFTER_FIRST_DRAW);
+    eventsManager.registerType(ParallaxerEvent.CURRENT_POSITION_CHANGED);
+    eventsManager.registerType(ParallaxerEvent.TARGET_POSITION_CHANGED);
+    eventsManager.registerType(ParallaxerEvent.AFTER_FIRST_DRAW);
     
-    isStarted = false;
+    areAllElementsInitialized = false;
 
     isSmoothScrollEnabled = false;
 
@@ -65,8 +65,7 @@ var ScrollParallaxer = function(initialScrollPosition) {
    *
    * Arguments control scrolling parameters for element.
    */
-  // TODO rename to addElement
-  this.add = function(element, speed, scrollOffset, type) {
+  this.addElement = function(element, speed, scrollOffset, type) {
     var object = null;
 
     if (element) {
@@ -81,61 +80,26 @@ var ScrollParallaxer = function(initialScrollPosition) {
       objects.push(object);
     }
 
+    areAllElementsInitialized = false;
+
     return object;
   };
 
-  /*
-   * Initializes parallaxer and draws registered elements for the first time.
-   *
-   * After calling this function parallaxer can be started and stopped.
-   */
-  // TODO rename to initialize
-  this.init = function() {
-    initObjects();
-
+  this.refresh = function() {
     draw(0, true);
-      
-    eventsManager.dispatch(ScrollParallaxerEvent.AFTER_FIRST_DRAW,
-            new ScrollParallaxerEvent('draw', currentScrollPosition));
-  };
-
-  /*
-   * Starts parallaxer.
-   */
-  this.start = function() {
-    if (isStarted === false) {
-      isStarted = true;
-
-      $(window).on('scroll', onScroll);
-      $(window).on('resize', onResize);
-      
-      onScroll();
-    }
-  };
-
-  /*
-   * Stops parallaxer.
-   */
-  this.stop = function() {
-    if (isStarted === true) {
-      isStarted = false;
-
-      $(window).off('scroll', onScroll);
-      $(window).off('resize', onResize);
-    }
   };
 
   /*
    * Returns current smooth scroll state.
    */
-  this.getIsSmoothScrollEnabled = function() {
+  this.isSmoothScrollEnabled = function() {
     return isSmoothScrollEnabled;
   };
 
   /*
    * Enables or disables smooth scroll.
    */
-  this.setIsSmoothScrollEnabled = function(value) {
+  this.setSmoothScrollEnabled = function(value) {
     isSmoothScrollEnabled = value;
   };
 
@@ -157,12 +121,15 @@ var ScrollParallaxer = function(initialScrollPosition) {
    * Sets target scroll position, i.e. position to which elements are scrolled.
    */
   this.setTargetScrollPosition = function(value) {
-    if (document.body !== undefined &&
-        document.body.scrollTop != undefined) {
-      document.body.scrollTop = value;
-    }
-    else {
-      document.documentElement.scrollTop = value;
+    if (targetScrollPosition !== value) {
+      targetScrollPosition = value;
+
+      eventsManager.dispatch(ParallaxerEvent.TARGET_POSITION_CHANGED,
+          new ParallaxerEvent('scroll', targetScrollPosition));
+
+      if (areAllElementsInitialized) {
+        looper.start();
+      }
     }
   };
 
@@ -172,17 +139,17 @@ var ScrollParallaxer = function(initialScrollPosition) {
    *
    */
 
-  var initObjects = function() {
+  var initializeObjects = function() {
     for (var key in objects) {
       var object = objects[key];
       var element = object.element;
 
       var initialVisiblePosition = 0;
       var elementCssPosition =
-          Utils.getComputedStyle(element, object.type == ScrollParallaxer.HORIZONTAL ? 'left' : 'top');
+          Utils.getComputedStyle(element, object.type == Parallaxer.HORIZONTAL ? 'left' : 'top');
       if (elementCssPosition !== 'auto') {
         initialVisiblePosition += Number(elementCssPosition.replace(/px/, ''));
-        element.style[object.type == ScrollParallaxer.HORIZONTAL ? 'left' : 'top'] = '0';
+        element.style[object.type == Parallaxer.HORIZONTAL ? 'left' : 'top'] = '0';
       }
       
       object['initialVisiblePosition'] = initialVisiblePosition;
@@ -190,19 +157,31 @@ var ScrollParallaxer = function(initialScrollPosition) {
       drawer.addObject(
           object.id,
           element,
-          object.type === ScrollParallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
+          object.type === Parallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
           0
       );
     }
   };
 
-  var draw = Utils.delegate(this, function(deltaTime, forceUpdate) {
+  var onLoopFrame = function(deltaTime) {
+    var hasChanged = draw(deltaTime, false);
+
+    // stops loop if nothing has changed in last frame
+    if (hasChanged === false) {
+      looper.stop();
+    }
+  };
+
+  var draw = function(deltaTime, forceUpdate) {
     var deltaPosition = targetScrollPosition - currentScrollPosition;
-    
     var absDeltaPosition = Math.abs(deltaPosition);
 
     var hasChanged = false;
     if (absDeltaPosition > 0.2 || forceUpdate) {
+      if (areAllElementsInitialized === false) {
+        initializeObjects();
+      }
+
       hasChanged = true;
 
       if (isSmoothScrollEnabled) {
@@ -221,16 +200,23 @@ var ScrollParallaxer = function(initialScrollPosition) {
         currentScrollPosition = targetScrollPosition;
       }
       
-      eventsManager.dispatch(ScrollParallaxerEvent.CURRENT_POSITION_CHANGED,
-          new ScrollParallaxerEvent('loop', currentScrollPosition));
+      eventsManager.dispatch(ParallaxerEvent.CURRENT_POSITION_CHANGED,
+          new ParallaxerEvent('loop', currentScrollPosition));
 
       drawer.startFrame();
       updateOffsets(currentScrollPosition);
       drawer.draw();
+
+      if (areAllElementsInitialized === false) {
+        areAllElementsInitialized = true;
+
+        eventsManager.dispatch(ParallaxerEvent.AFTER_FIRST_DRAW,
+            new ParallaxerEvent('draw', currentScrollPosition));
+      }
     }
     
     return hasChanged;
-  });
+  };
 
   var updateOffsets = function(newScrollPosition) {
     for (var key in objects) {
@@ -245,37 +231,8 @@ var ScrollParallaxer = function(initialScrollPosition) {
     }
   };
 
-  var onLoopFrame = function(deltaTime) {
-    var hasChanged = draw(deltaTime, false);
-
-    // stops loop if nothing has changed in last frame
-    if (hasChanged === false) {
-      looper.stop();
-    }
-  };
-
-  var onScroll = Utils.delegate(this, function() {
-    var value = 
-      (document.body !== undefined && document.body.scrollTop !== undefined) ?
-          document.body.scrollTop :
-          document.documentElement.scrollTop;
-
-    if (targetScrollPosition !== value) {
-      targetScrollPosition = value;
-
-      eventsManager.dispatch(ScrollParallaxerEvent.TARGET_POSITION_CHANGED,
-          new ScrollParallaxerEvent('scroll', targetScrollPosition));
-
-      looper.start();
-    }
-  });
-  
-  var onResize = function() {
-    draw(0, true);
-  };
-
   construct();
 };
 
-ScrollParallaxer.HORIZONTAL = 'horizontal';
-ScrollParallaxer.VERTICAL = 'vertical';
+Parallaxer.HORIZONTAL = 'horizontal';
+Parallaxer.VERTICAL = 'vertical';

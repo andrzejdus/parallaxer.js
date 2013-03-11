@@ -39,7 +39,6 @@ var Drawer = function() {
     if (stateObject) {
       stateObject.setOffset(newOffset);
       var element = stateObject.getElement();
-      //console.log(element);
       stateObject.updateVisibility(
           visibilityChecker.isVisible(
             stateObject.getOffset(), heightsCache.get(element))
@@ -80,9 +79,14 @@ var Drawer = function() {
     }
   });
 
+  var updateScreenObject = function(screenObject, stateObject) {
+    screenObject.setOffset(stateObject.getOffset());
+    screenObject.updateVisibility(stateObject.isVisible());
+  };
+
   var isRedrawNeeded = function(stateObject, screenObject) {
     var hasVisibilityChanged = stateObject.isVisible() != screenObject.isVisible();
-    var hasOffsetChanged = stateObject.getOffset() != screenObject.getOffset(); 
+    var hasOffsetChanged = stateObject.getOffset() != screenObject.getOffset();
 
     var isRedrawNeededValue =
         hasVisibilityChanged ||
@@ -102,11 +106,6 @@ var Drawer = function() {
     return true;
   };
 
-  var updateScreenObject = function(screenObject, stateObject) {
-    screenObject.setOffset(stateObject.getOffset());
-    screenObject.updateVisibility(stateObject.isVisible());
-  };
-  
   construct();
 };
 
