@@ -1,14 +1,14 @@
 goog.provide('test.Main');
 
-goog.require('andrzejdus.parallaxer.ScrollParallaxer');
+goog.require('andrzejdus.parallaxer.Parallaxer');
 
 var Main = function() {
   $(window).ready(function onWindowReady() {
-    var scrollParallaxer = new ScrollParallaxer();
+    var parallaxer = new Parallaxer();
 
-    scrollParallaxer.add(document.getElementById('testElement1'), 1.5, 0, ScrollParallaxer.VERTICAL);
-    scrollParallaxer.init();
-    scrollParallaxer.start();
+    parallaxer.add(document.getElementById('testElement1'), 1.5, 0, Parallaxer.VERTICAL);
+    parallaxer.init();
+    parallaxer.start();
   });
 };
 
