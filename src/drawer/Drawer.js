@@ -10,7 +10,6 @@ var Drawer = function() {
   var isHardwareTransformEnabled = transformPropertyName ? true : false;
 
   var stateObjects = {};
-  var screenObjects = {};
   var stateObjectsToRedraw = {};
 
   var heightsCache = null;
@@ -24,10 +23,8 @@ var Drawer = function() {
 
   this.addObject = function(id, element, type, offset) {
     stateObjects[id] = new DrawerObject(element, type, offset);
-    screenObjects[id] = new DrawerObject(element, type, offset);
-    
+
     stateObjectsToRedraw = {};
-    //console.log(stateObjects);
   };
 
   this.startFrame = function() {
@@ -43,12 +40,7 @@ var Drawer = function() {
           visibilityChecker.isVisible(
             stateObject.getOffset(), heightsCache.get(element))
       );
-
-      var screenObject = screenObjects[id];
-
-      if (isRedrawNeeded(stateObject, screenObject)) {
-        stateObjectsToRedraw[id] = stateObject;
-      }
+      stateObjectsToRedraw[id] = stateObject;
     }
     else {
       console.error('Unknown object id ' + id);
@@ -73,38 +65,8 @@ var Drawer = function() {
               stateObject.getOffset() + 'px';
         }
       }
-
-      var screenObject = screenObjects[id];
-      updateScreenObject(screenObject, stateObject);
     }
   });
-
-  var updateScreenObject = function(screenObject, stateObject) {
-    screenObject.setOffset(stateObject.getOffset());
-    screenObject.updateVisibility(stateObject.isVisible());
-  };
-
-  var isRedrawNeeded = function(stateObject, screenObject) {
-    var hasVisibilityChanged = stateObject.isVisible() != screenObject.isVisible();
-    var hasOffsetChanged = stateObject.getOffset() != screenObject.getOffset();
-
-    var isRedrawNeededValue =
-        hasVisibilityChanged ||
-        (stateObject.isVisible() && hasOffsetChanged) ||
-        stateObject.getType() === DrawerObject.HORIZONTAL;
-
-    // TODO remove before release
-//    if (false && id === '.page0 .layer.starsBack') {
-//      console.log(stateObject.isVisible() + '!=' + screenObject.isVisible());
-//      console.log(stateObject.getOffset() + '!=' + screenObject.getOffset());
-//      console.log(isRedrawNeededValue);
-//    }
-
-    // TODO activate "is redraw needed"
-    //return isRedrawNeededValue;
-
-    return true;
-  };
 
   construct();
 };
