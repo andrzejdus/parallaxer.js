@@ -23,6 +23,7 @@ var Parallaxer = function(initialScrollPosition) {
 
   var drawer = new Drawer();
   var looper = null;
+  var onLoopFrameHook = null;
   
   var construct = Utils.delegate(this, function() {
     if (initialScrollPosition == undefined) {
@@ -74,6 +75,7 @@ var Parallaxer = function(initialScrollPosition) {
     var object = null;
 
     if (element) {
+      // TODO shouldn't this object have definition?
       object = {
           'id': objects.length,
           'element': element,
@@ -139,6 +141,13 @@ var Parallaxer = function(initialScrollPosition) {
   };
 
   /*
+   * Sets callback that gets executed on every frame draw.
+   */
+  this.setLoopFrameHook = function(callback) {
+      onLoopFrameHook = callback;
+  };
+
+  /*
    *
    * Private methods
    *
@@ -175,7 +184,12 @@ var Parallaxer = function(initialScrollPosition) {
     if (hasChanged === false) {
       looper.stop();
     }
+
+    if (onLoopFrameHook) {
+        onLoopFrameHook(deltaTime);
+    }
   };
+
 
   var draw = function(deltaTime, forceUpdate) {
     var deltaPosition = targetScrollPosition - currentScrollPosition;
