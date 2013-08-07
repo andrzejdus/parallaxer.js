@@ -25,8 +25,13 @@ var Parallaxer = function(initialScrollPosition) {
   var looper = null;
   
   var construct = Utils.delegate(this, function() {
-    currentScrollPosition = initialScrollPosition;
-    targetScrollPosition = initialScrollPosition;
+    if (initialScrollPosition == undefined) {
+      currentScrollPosition = 0;
+      targetScrollPosition = 0;
+    } else {
+      currentScrollPosition = initialScrollPosition;
+      targetScrollPosition = initialScrollPosition;
+    }
 
     eventsManager = new EventsManager();
     eventsManager.registerType(ParallaxerEvent.CURRENT_POSITION_CHANGED);
