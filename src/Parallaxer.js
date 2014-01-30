@@ -38,7 +38,8 @@ var Parallaxer = function(initialScrollPosition) {
     eventsManager.registerType(ParallaxerEvent.CURRENT_POSITION_CHANGED);
     eventsManager.registerType(ParallaxerEvent.TARGET_POSITION_CHANGED);
     eventsManager.registerType(ParallaxerEvent.AFTER_FIRST_DRAW);
-    
+    eventsManager.registerType(ParallaxerEvent.AFTER_LOOP_STOP);
+
     areAllElementsInitialized = false;
 
     isSmoothScrollEnabled = false;
@@ -132,7 +133,7 @@ var Parallaxer = function(initialScrollPosition) {
       targetScrollPosition = value;
 
       eventsManager.dispatch(ParallaxerEvent.TARGET_POSITION_CHANGED,
-          new ParallaxerEvent('scroll', targetScrollPosition));
+          new ParallaxerEvent(this));
 
       if (areAllElementsInitialized) {
         looper.start();
@@ -177,21 +178,22 @@ var Parallaxer = function(initialScrollPosition) {
     }
   };
 
-  var onLoopFrame = function(deltaTime) {
+  var onLoopFrame = Utils.delegate(this, function(deltaTime) {
     var hasChanged = draw(deltaTime, false);
 
     // stops loop if nothing has changed in last frame
     if (hasChanged === false) {
       looper.stop();
+      eventsManager.dispatch(ParallaxerEvent.AFTER_LOOP_STOP,
+          new ParallaxerEvent(this));
     }
 
     if (onLoopFrameHook) {
         onLoopFrameHook(deltaTime);
     }
-  };
+  });
 
-
-  var draw = function(deltaTime, forceUpdate) {
+  var draw = Utils.delegate(this, function(deltaTime, forceUpdate) {
     var deltaPosition = targetScrollPosition - currentScrollPosition;
     var absDeltaPosition = Math.abs(deltaPosition);
 
@@ -220,7 +222,7 @@ var Parallaxer = function(initialScrollPosition) {
       }
       
       eventsManager.dispatch(ParallaxerEvent.CURRENT_POSITION_CHANGED,
-          new ParallaxerEvent('loop', currentScrollPosition));
+          new ParallaxerEvent(this));
 
       drawer.startFrame();
       updateOffsets(currentScrollPosition);
@@ -230,12 +232,12 @@ var Parallaxer = function(initialScrollPosition) {
         areAllElementsInitialized = true;
 
         eventsManager.dispatch(ParallaxerEvent.AFTER_FIRST_DRAW,
-            new ParallaxerEvent('draw', currentScrollPosition));
+            new ParallaxerEvent(this));
       }
     }
     
     return hasChanged;
-  };
+  });
 
   var updateOffsets = function(newScrollPosition) {
     for (var key in objects) {
