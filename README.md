@@ -1,7 +1,15 @@
 parallaxer.js
 ==========
 
-HTML/JavaScript parallaxe effect library developed for boy-coy.com
+HTML/JavaScript parallaxe effect library developed for http://boy-coy.com
+
+### Usage
+
+Download the minified library (can be found in dist directory) and include it in your html.
+
+```html
+<script src="parallaxer.min.js"></script>
+```
 
 ### Building
 
