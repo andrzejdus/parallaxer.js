@@ -2,7 +2,6 @@ goog.provide('andrzejdus.parallaxer.Parallaxer');
 
 goog.require('andrzejdus.parallaxer.ParallaxerEvent');
 goog.require('andrzejdus.parallaxer.drawer.Drawer');
-goog.require('andrzejdus.utils.RequestAnimationFrame');
 goog.require('andrzejdus.utils.Log');
 goog.require('andrzejdus.utils.Looper');
 goog.require('andrzejdus.utils.Utils');
