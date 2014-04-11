@@ -2,11 +2,10 @@
 // Please do not edit.
 goog.addDependency('../../../../libs/utils.js/src/Log.js', ['andrzejdus.utils.Log'], []);
 goog.addDependency('../../../../libs/utils.js/src/Looper.js', ['andrzejdus.utils.Looper'], []);
-goog.addDependency('../../../../libs/utils.js/src/RequestAnimationFrame.js', ['andrzejdus.utils.RequestAnimationFrame'], []);
 goog.addDependency('../../../../libs/utils.js/src/Utils.js', ['andrzejdus.utils.Utils'], []);
 goog.addDependency('../../../../libs/utils.js/src/events/EventManager.js', ['andrzejdus.utils.events.EventManager'], []);
 goog.addDependency('../../../../libs/utils.js/src/events/EventsManager.js', ['andrzejdus.utils.events.EventsManager'], ['andrzejdus.utils.events.EventManager']);
-goog.addDependency('../../../../src/Parallaxer.js', ['andrzejdus.parallaxer.Parallaxer'], ['andrzejdus.parallaxer.ParallaxerEvent', 'andrzejdus.parallaxer.drawer.Drawer', 'andrzejdus.utils.Log', 'andrzejdus.utils.Looper', 'andrzejdus.utils.RequestAnimationFrame', 'andrzejdus.utils.Utils', 'andrzejdus.utils.events.EventsManager']);
+goog.addDependency('../../../../src/Parallaxer.js', ['andrzejdus.parallaxer.Parallaxer'], ['andrzejdus.parallaxer.ParallaxerEvent', 'andrzejdus.parallaxer.drawer.Drawer', 'andrzejdus.utils.Log', 'andrzejdus.utils.Looper', 'andrzejdus.utils.Utils', 'andrzejdus.utils.events.EventsManager']);
 goog.addDependency('../../../../src/ParallaxerEvent.js', ['andrzejdus.parallaxer.ParallaxerEvent'], []);
 goog.addDependency('../../../../src/drawer/Cache.js', ['andrzejdus.parallaxer.drawer.Cache'], []);
 goog.addDependency('../../../../src/drawer/Drawer.js', ['andrzejdus.parallaxer.drawer.Drawer'], ['andrzejdus.parallaxer.drawer.Cache', 'andrzejdus.parallaxer.drawer.DrawerObject', 'andrzejdus.parallaxer.drawer.VisibilityChecker', 'andrzejdus.utils.Log']);
