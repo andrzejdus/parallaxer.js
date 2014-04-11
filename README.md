@@ -3,4 +3,12 @@ parallaxer.js
 
 HTML/JavaScript parallaxe effect library developed for boy-coy.com
 
-Work in progress.
+### Building
+
+Prerequisites
+
+    * npm
+    * grunt cli
+    
+npm install
+grunt
