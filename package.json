@@ -1,0 +1,26 @@
+{
+  "name": "parallaxer.js",
+  "version": "0.1.9",
+  "description": "HTML/JavaScript parallaxe effect library developed for boy-coy.com",
+  "main": "dist/parallaxer.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrzejdus/parallaxer.js.git"
+  },
+  "author": "Andrzej Duś <andrzej.dus@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/andrzejdus/parallaxer.js/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-closure-tools": "~0.9.6",
+    "grunt-bumpx": "~0.2.0"
+  }
+}

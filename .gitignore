@@ -50,3 +50,7 @@ Thumbs.db
 *.jar
 *.war
 *.ear
+
+# Build #
+######################
+node_modules
