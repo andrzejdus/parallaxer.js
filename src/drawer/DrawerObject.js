@@ -1,29 +1,29 @@
 goog.provide('andrzejdus.parallaxer.drawer.DrawerObject');
 
-var DrawerObject = function(element, type, offset) {
+var DrawerObject = function (element, type, offset) {
   var isVisibleValue = true;
 
-  this.getElement = function() {
+  this.getElement = function () {
     return element;
   };
 
-  this.getOffset = function() {
+  this.getOffset = function () {
     return offset;
   };
 
-  this.setOffset = function(value) {
+  this.setOffset = function (value) {
     offset = value;
   };
 
-  this.getType = function() {
+  this.getType = function () {
     return type;
   };
 
-  this.isVisible = function() {
+  this.isVisible = function () {
     return isVisibleValue;
   };
 
-  this.updateVisibility = function(value) {
+  this.updateVisibility = function (value) {
     isVisibleValue = value;
   };
 };

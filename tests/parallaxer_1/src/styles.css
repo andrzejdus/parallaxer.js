@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+}
+
+div {
+    width: 100%;
+    height: 500px;
+}
+
+div:nth-of-type(1) {
+    /* http://lea.verou.me/css3patterns/#microbial-mat */
+    background:
+        radial-gradient(circle at 0% 50%, rgba(96, 16, 48, 0) 9px, #613 10px, rgba(96, 16, 48, 0) 11px) 0px 10px,
+        radial-gradient(at 100% 100%,     rgba(96, 16, 48, 0) 9px, #613 10px, rgba(96, 16, 48, 0) 11px),
+        #8a3;
+    background-size: 20px 20px;
+}
+
+div:nth-of-type(2) {
+    /* http://lea.verou.me/css3patterns/#stairs */
+    background:
+        linear-gradient(63deg, #999 23%, transparent 23%) 7px 0,
+        linear-gradient(63deg, transparent 74%, #999 78%),
+        linear-gradient(63deg, transparent 34%, #999 38%, #999 58%, transparent 62%),
+        #444;
+    background-size: 16px 48px;
+}
+
+div:nth-of-type(3) {
+    /* http://lea.verou.me/css3patterns/#arrows */
+    background:
+        linear-gradient(45deg, #92baac 45px, transparent 45px)64px 64px,
+        linear-gradient(45deg, #92baac 45px, transparent 45px,transparent 91px, #e1ebbd 91px, #e1ebbd 135px, transparent 135px),
+        linear-gradient(-45deg, #92baac 23px, transparent 23px, transparent 68px,#92baac 68px,#92baac 113px,transparent 113px,transparent 158px,#92baac 158px);
+    background-color:#e1ebbd;
+    background-size: 128px 128px;
+}
+
+div:nth-of-type(4) {
+    /* http://lea.verou.me/css3patterns/#zig-zag */
+    background:
+        linear-gradient(135deg, #ECEDDC 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #ECEDDC 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #ECEDDC 25%, transparent 25%),
+        linear-gradient(45deg, #ECEDDC 25%, transparent 25%);
+    background-size: 100px 100px;
+    background-color: #EC173A;
+}
+
+div:nth-of-type(5) {
+    /* http://lea.verou.me/css3patterns/#hearts */
+    background:
+        radial-gradient(circle closest-side at 60% 43%, #b03 26%, rgba(187,0,51,0) 27%),
+        radial-gradient(circle closest-side at 40% 43%, #b03 26%, rgba(187,0,51,0) 27%),
+        radial-gradient(circle closest-side at 40% 22%, #d35 45%, rgba(221,51,85,0) 46%),
+        radial-gradient(circle closest-side at 60% 22%, #d35 45%, rgba(221,51,85,0) 46%),
+        radial-gradient(circle closest-side at 50% 35%, #d35 30%, rgba(221,51,85,0) 31%),
+
+        radial-gradient(circle closest-side at 60% 43%, #b03 26%, rgba(187,0,51,0) 27%) 50px 50px,
+        radial-gradient(circle closest-side at 40% 43%, #b03 26%, rgba(187,0,51,0) 27%) 50px 50px,
+        radial-gradient(circle closest-side at 40% 22%, #d35 45%, rgba(221,51,85,0) 46%) 50px 50px,
+        radial-gradient(circle closest-side at 60% 22%, #d35 45%, rgba(221,51,85,0) 46%) 50px 50px,
+        radial-gradient(circle closest-side at 50% 35%, #d35 30%, rgba(221,51,85,0) 31%) 50px 50px;
+    background-color:#b03;
+    background-size:100px 100px;
+}
+
+div:nth-of-type(6) {
+    /* http://lea.verou.me/css3patterns/#yin-yang */
+    background:
+        radial-gradient(circle at 50% 59%, #D2CAAB 3%, #364E27 4%, #364E27 11%, rgba(54,78,39,0) 12%, rgba(54,78,39,0)) 50px 0,
+        radial-gradient(circle at 50% 41%, #364E27 3%, #D2CAAB 4%, #D2CAAB 11%, rgba(210,202,171,0) 12%, rgba(210,202,171,0)) 50px 0,
+        radial-gradient(circle at 50% 59%, #D2CAAB 3%, #364E27 4%, #364E27 11%, rgba(54,78,39,0) 12%, rgba(54,78,39,0)) 0 50px,
+        radial-gradient(circle at 50% 41%, #364E27 3%, #D2CAAB 4%, #D2CAAB 11%, rgba(210,202,171,0) 12%, rgba(210,202,171,0)) 0 50px,
+        radial-gradient(circle at 100% 50%, #D2CAAB 16%, rgba(210,202,171,0) 17%),
+        radial-gradient(circle at 0% 50%, #364E27 16%, rgba(54,78,39,0) 17%),
+        radial-gradient(circle at 100% 50%, #D2CAAB 16%, rgba(210,202,171,0) 17%) 50px 50px,
+        radial-gradient(circle at 0% 50%, #364E27 16%, rgba(54,78,39,0) 17%) 50px 50px;
+    background-color:#63773F;
+    background-size:100px 100px;
+}
