@@ -26,62 +26,75 @@ goog.require('andrzejdus.parallaxer.drawer.DrawerObject');
 goog.require('andrzejdus.parallaxer.drawer.Cache');
 goog.require('andrzejdus.parallaxer.drawer.VisibilityChecker');
 
-var Drawer = function () {
-  var transformPropertyName = Modernizr.prefixed('transform');
+var andrzejdus = andrzejdus || {};
+andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
-  var stateObjects = {};
-  var stateObjectsToRedraw = {};
+(function (namespace, undefined) {
+  "use strict";
 
-  var heightsCache = null;
+  var Drawer = function () {
+    var DrawerObject = andrzejdus.parallaxer.DrawerObject;
+    var Cache = andrzejdus.parallaxer.Cache;
+    var VisibilityChecker = andrzejdus.parallaxer.VisibilityChecker;
 
-  var visibilityChecker = new VisibilityChecker();
+    var transformPropertyName = Modernizr.prefixed('transform');
 
-  var construct = Utils.delegate(this, function () {
-    heightsCache = new Cache(function onCacheCreate(element) {
+    var stateObjects = {};
+    var stateObjectsToRedraw = {};
+
+    var heightsCache = null;
+
+    var visibilityChecker = new VisibilityChecker();
+
+    var construct = Utils.delegate(this, function () {
+      heightsCache = new Cache(function onCacheCreate(element) {
+      });
     });
-  });
 
-  this.addObject = function (id, element, type, offset) {
-    stateObjects[id] = new DrawerObject(element, type, offset);
+    this.addObject = function (id, element, type, offset) {
+      stateObjects[id] = new DrawerObject(element, type, offset);
 
-    stateObjectsToRedraw = {};
-  };
+      stateObjectsToRedraw = {};
+    };
 
-  this.startFrame = function () {
-    stateObjectsToRedraw = {};
-  };
+    this.startFrame = function () {
+      stateObjectsToRedraw = {};
+    };
 
-  this.updateOffset = function (id, newOffset) {
-    var stateObject = stateObjects[id];
-    if (stateObject) {
-      stateObject.setOffset(newOffset);
-      var element = stateObject.getElement();
-      stateObject.updateVisibility(
-        visibilityChecker.isVisible(
-          stateObject.getOffset(), heightsCache.get(element))
-      );
-      stateObjectsToRedraw[id] = stateObject;
-    }
-    else {
-      console.error('Unknown object id ' + id);
-    }
-  };
-
-  this.draw = Utils.delegate(this, function () {
-    for (var id in stateObjectsToRedraw) {
-      var stateObject = stateObjectsToRedraw[id];
-
-      var element = stateObject.getElement();
-
-      if (element) {
-        element.style[transformPropertyName] =
-          'translate' +
-          (stateObject.getType() === DrawerObject.HORIZONTAL ? 'X' : 'Y') +
-          '(' + stateObject.getOffset() + 'px)';
+    this.updateOffset = function (id, newOffset) {
+      var stateObject = stateObjects[id];
+      if (stateObject) {
+        stateObject.setOffset(newOffset);
+        var element = stateObject.getElement();
+        stateObject.updateVisibility(
+          visibilityChecker.isVisible(
+            stateObject.getOffset(), heightsCache.get(element))
+        );
+        stateObjectsToRedraw[id] = stateObject;
       }
-    }
-  });
+      else {
+        console.error('Unknown object id ' + id);
+      }
+    };
 
-  construct();
-};
+    this.draw = Utils.delegate(this, function () {
+      for (var id in stateObjectsToRedraw) {
+        var stateObject = stateObjectsToRedraw[id];
+
+        var element = stateObject.getElement();
+
+        if (element) {
+          element.style[transformPropertyName] =
+            'translate' +
+            (stateObject.getType() === DrawerObject.HORIZONTAL ? 'X' : 'Y') +
+            '(' + stateObject.getOffset() + 'px)';
+        }
+      }
+    });
+
+    construct();
+  };
+
+  namespace.Drawer = Drawer;
+}(andrzejdus.parallaxer));
 

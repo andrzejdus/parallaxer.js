@@ -21,18 +21,28 @@
 
 goog.provide('andrzejdus.parallaxer.drawer.Cache');
 
-var Cache = function (onCreate) {
-  var cache = {};
 
-  this.get = function (key) {
-    var cachedObject = cache[key];
+var andrzejdus = andrzejdus || {};
+andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
-    if (!cachedObject) {
+(function (namespace, undefined) {
+  "use strict";
 
-      cachedObject = onCreate(key);
-      cache[key] = cachedObject;
-    }
+  var Cache = function (onCreate) {
+    var cache = {};
 
-    return cachedObject;
+    this.get = function (key) {
+      var cachedObject = cache[key];
+
+      if (!cachedObject) {
+
+        cachedObject = onCreate(key);
+        cache[key] = cachedObject;
+      }
+
+      return cachedObject;
+    };
   };
-};
+
+  namespace.Cache = Cache;
+}(andrzejdus.parallaxer));

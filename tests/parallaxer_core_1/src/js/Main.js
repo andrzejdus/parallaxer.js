@@ -5,6 +5,8 @@ goog.require('andrzejdus.utils.Looper');
 
 var Main = function() {
   $(window).ready(function onWindowReady() {
+    var ParallaxerCore = andrzejdus.parallaxer.ParallaxerCore;
+
     //$('body').height(2000);
     var parallaxer = new ParallaxerCore();
 

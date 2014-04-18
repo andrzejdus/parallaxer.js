@@ -35,7 +35,7 @@ andrzejdus.DEBUG = true;
   var Parallaxer = function () {
     this.isSmoothScrollEnabled = false;
     this.layers = [];
-    this.parallaxerCore = new ParallaxerCore();
+    this.parallaxerCore = new andrzejdus.parallaxer.ParallaxerCore();
   };
 
   Parallaxer.prototype.setSmoothScrollEnabled = function (value) {
@@ -70,7 +70,7 @@ andrzejdus.DEBUG = true;
         layer.element,
         layer.speed,
         layer.initialElementOffsetTop,
-        ParallaxerCore.VERTICAL);
+        andrzejdus.parallaxer.ParallaxerCore.VERTICAL);
     }
 
     var $window = $(window);

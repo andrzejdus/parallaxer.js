@@ -21,35 +21,44 @@
 
 goog.provide('andrzejdus.parallaxer.drawer.VisibilityChecker');
 
-var VisibilityChecker = function () {
-  var windowTop = null;
-  var windowBottom = null;
+var andrzejdus = andrzejdus || {};
+andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
-  var construct = Utils.delegate(this, function () {
-    updateWindowBounds();
-    $(window).on('resize', onResize);
-  });
+(function (namespace, undefined) {
+  "use strict";
 
-  this.isVisible = function (top, bottom) {
-    var isVisible = false;
+  var VisibilityChecker = function () {
+    var windowTop = null;
+    var windowBottom = null;
 
-    if ((top >= windowTop && top <= windowBottom) ||
-      (bottom >= windowTop && bottom <= windowBottom) ||
-      (top < windowTop && bottom > windowBottom)) {
-      isVisible = true;
-    }
+    var construct = Utils.delegate(this, function () {
+      updateWindowBounds();
+      $(window).on('resize', onResize);
+    });
 
-    return isVisible;
+    this.isVisible = function (top, bottom) {
+      var isVisible = false;
+
+      if ((top >= windowTop && top <= windowBottom) ||
+        (bottom >= windowTop && bottom <= windowBottom) ||
+        (top < windowTop && bottom > windowBottom)) {
+        isVisible = true;
+      }
+
+      return isVisible;
+    };
+
+    var onResize = function () {
+      updateWindowBounds();
+    };
+
+    var updateWindowBounds = function () {
+      windowTop = 0;
+      windowBottom = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
+    };
+
+    construct();
   };
 
-  var onResize = function () {
-    updateWindowBounds();
-  };
-
-  var updateWindowBounds = function () {
-    windowTop = 0;
-    windowBottom = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
-  };
-
-  construct();
-};
+  namespace.VisibilityChecker = VisibilityChecker;
+}(andrzejdus.parallaxer));

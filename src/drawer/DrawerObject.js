@@ -21,33 +21,42 @@
 
 goog.provide('andrzejdus.parallaxer.drawer.DrawerObject');
 
-var DrawerObject = function (element, type, offset) {
-  var isVisibleValue = true;
+var andrzejdus = andrzejdus || {};
+andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
-  this.getElement = function () {
-    return element;
+(function (namespace, undefined) {
+  "use strict";
+
+  var DrawerObject = function (element, type, offset) {
+    var isVisibleValue = true;
+
+    this.getElement = function () {
+      return element;
+    };
+
+    this.getOffset = function () {
+      return offset;
+    };
+
+    this.setOffset = function (value) {
+      offset = value;
+    };
+
+    this.getType = function () {
+      return type;
+    };
+
+    this.isVisible = function () {
+      return isVisibleValue;
+    };
+
+    this.updateVisibility = function (value) {
+      isVisibleValue = value;
+    };
   };
 
-  this.getOffset = function () {
-    return offset;
-  };
+  DrawerObject.HORIZONTAL = 'horizontal';
+  DrawerObject.VERTICAL = 'vertical';
 
-  this.setOffset = function (value) {
-    offset = value;
-  };
-
-  this.getType = function () {
-    return type;
-  };
-
-  this.isVisible = function () {
-    return isVisibleValue;
-  };
-
-  this.updateVisibility = function (value) {
-    isVisibleValue = value;
-  };
-};
-
-DrawerObject.HORIZONTAL = 'horizontal';
-DrawerObject.VERTICAL = 'vertical';
+  namespace.DrawerObject = DrawerObject;
+}(andrzejdus.parallaxer));
