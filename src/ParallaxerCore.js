@@ -25,7 +25,7 @@ var ParallaxerCore = function (initialScrollPosition) {
 
 
   var construct = Utils.delegate(this, function () {
-    if (initialScrollPosition == undefined) {
+    if (initialScrollPosition === undefined) {
       currentScrollPosition = 0;
       targetScrollPosition = 0;
     } else {
