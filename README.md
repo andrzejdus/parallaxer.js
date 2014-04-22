@@ -6,6 +6,7 @@ HTML/JavaScript parallaxe effect library developed for http://boy-coy.com
 ### Usage
 
 Prerequisites:
+* jQuery
 * Modernizr
 
 Download the minified library (can be found in dist directory) and include it in your html.
