@@ -19,7 +19,7 @@
  * @author Andrzej Duś <andrzej@boycoy.com>
  */
 
-goog.provide('andrzejdus.parallaxer.drawer.DrawerObject');
+goog.provide('andrzejdus.parallaxer.ParallaxerCoreEvent');
 
 var andrzejdus = andrzejdus || {};
 andrzejdus.parallaxer = andrzejdus.parallaxer || {};
@@ -27,36 +27,16 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 (function (namespace, undefined) {
   "use strict";
 
-  var DrawerObject = function (element, type, offset) {
-    var isVisibleValue = true;
-
-    this.getElement = function () {
-      return element;
-    };
-
-    this.getOffset = function () {
-      return offset;
-    };
-
-    this.setOffset = function (value) {
-      offset = value;
-    };
-
-    this.getType = function () {
-      return type;
-    };
-
-    this.isVisible = function () {
-      return isVisibleValue;
-    };
-
-    this.updateVisibility = function (value) {
-      isVisibleValue = value;
-    };
+  /** @constructor */
+  var ParallaxerCoreEvent = function (source) {
+    this.source = source;
   };
 
-  DrawerObject.HORIZONTAL = 'horizontal';
-  DrawerObject.VERTICAL = 'vertical';
+  ParallaxerCoreEvent.CURRENT_POSITION_CHANGED = 'current_position_changed';
+  ParallaxerCoreEvent.TARGET_POSITION_CHANGED = 'target_position_changed';
+  ParallaxerCoreEvent.AFTER_FIRST_DRAW = 'after_first_draw';
+  ParallaxerCoreEvent.AFTER_LOOP_STOP = 'after_loop_stop';
 
-  namespace.DrawerObject = DrawerObject;
+  namespace.ParallaxerCoreEvent = ParallaxerCoreEvent;
 }(andrzejdus.parallaxer));
+

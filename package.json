@@ -1,6 +1,6 @@
 {
   "name": "parallaxer.js",
-  "version": "0.1.11",
+  "version": "0.1.22",
   "description": "HTML/JavaScript parallaxe effect library developed for boy-coy.com",
   "main": "dist/parallaxer.js",
   "directories": {
@@ -21,6 +21,7 @@
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-closure-tools": "~0.9.6",
-    "grunt-bumpx": "~0.2.0"
+    "grunt-bumpx": "~0.2.0",
+    "grunt-contrib-concat": "~0.4.0"
   }
 }

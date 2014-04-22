@@ -13,4 +13,4 @@ goog.addDependency('../../../../src/drawer/Cache.js', ['andrzejdus.parallaxer.dr
 goog.addDependency('../../../../src/drawer/Drawer.js', ['andrzejdus.parallaxer.drawer.Drawer'], ['andrzejdus.parallaxer.drawer.Cache', 'andrzejdus.parallaxer.drawer.DrawerObject', 'andrzejdus.parallaxer.drawer.VisibilityChecker', 'andrzejdus.utils.Log']);
 goog.addDependency('../../../../src/drawer/DrawerObject.js', ['andrzejdus.parallaxer.drawer.DrawerObject'], []);
 goog.addDependency('../../../../src/drawer/VisibilityChecker.js', ['andrzejdus.parallaxer.drawer.VisibilityChecker'], []);
-goog.addDependency('../../../../tests/parallaxer_1/src/js/Main.js', ['test.Main'], ['andrzejdus.parallaxer.Parallaxer']);
+goog.addDependency('../../../../tests/parallaxer_1/src/js/Main.js', ['test.Main'], ['andrzejdus.parallaxer.Parallaxer', 'andrzejdus.utils.Looper']);

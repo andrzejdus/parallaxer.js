@@ -1,258 +1,109 @@
+/*
+ * Copyright 2014 Andrzej Duś
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+/**
+ * @author Andrzej Duś <andrzej@boycoy.com>
+ */
+
 goog.provide('andrzejdus.parallaxer.Parallaxer');
 
-goog.require('andrzejdus.parallaxer.ParallaxerEvent');
-goog.require('andrzejdus.parallaxer.drawer.Drawer');
-goog.require('andrzejdus.utils.Log');
-goog.require('andrzejdus.utils.Looper');
-goog.require('andrzejdus.utils.Utils');
-goog.require('andrzejdus.utils.events.EventsManager');
+goog.require('andrzejdus.parallaxer.ParallaxerCore');
 
-/** @constructor */
-var Parallaxer = function(initialScrollPosition) {
-  var eventsManager = null;
+var andrzejdus = andrzejdus || {};
+andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
-  var areAllElementsInitialized = null;
+/** @define {boolean} */
+andrzejdus.DEBUG = true;
 
-  var currentScrollPosition = null;
-  var targetScrollPosition = null;
+(function (namespace, undefined) {
+  "use strict";
 
-  var isSmoothScrollEnabled = null;
-  
-  var objects = []; 
+  var Parallaxer = function () {
+    this.isSmoothScrollEnabled = false;
+    this.layers = [];
+    this.parallaxerCore = new andrzejdus.parallaxer.ParallaxerCore();
+  };
 
-  var drawer = new Drawer();
-  var looper = null;
-  var onLoopFrameHook = null;
-  
-  var construct = Utils.delegate(this, function() {
-    if (initialScrollPosition == undefined) {
-      currentScrollPosition = 0;
-      targetScrollPosition = 0;
-    } else {
-      currentScrollPosition = initialScrollPosition;
-      targetScrollPosition = initialScrollPosition;
+  Parallaxer.prototype.setSmoothScrollEnabled = function (value) {
+    this.isSmoothScrollEnabled = value;
+  };
+
+  Parallaxer.prototype.init = function () {
+    this.parallaxerCore.setSmoothScrollEnabled(this.isSmoothScrollEnabled);
+
+    this.layers = [];
+    var self = this;
+    $('[data-type="parallaxer-layer"]').each(function () {
+      var $element = $(this);
+      self.layers.push({
+        element: this,
+        $element: $element,
+        initialElementOffsetTop: $element.offset().top,
+        offsetTop: parseInt($element.data('parallaxer-offset-top'), 10) || 0,
+        speed: $element.data('parallaxer-speed'),
+        // we cannot use data here because it coerces 'false' string and no value to boolean false
+        autoCss: $element.attr('data-parallaxer-auto-css') !== 'false'
+      });
+    });
+
+    for (var i = 0; i < this.layers.length; i++) {
+      var layer = this.layers[i];
+
+      if (layer.autoCss) {
+        layer.$element.css({'position': 'fixed', 'top': '0px'});
+      }
+      this.parallaxerCore.addElement(
+        layer.element,
+        layer.speed,
+        layer.initialElementOffsetTop,
+        andrzejdus.parallaxer.ParallaxerCore.VERTICAL);
     }
 
-    eventsManager = new EventsManager();
-    eventsManager.registerType(ParallaxerEvent.CURRENT_POSITION_CHANGED);
-    eventsManager.registerType(ParallaxerEvent.TARGET_POSITION_CHANGED);
-    eventsManager.registerType(ParallaxerEvent.AFTER_FIRST_DRAW);
-    eventsManager.registerType(ParallaxerEvent.AFTER_LOOP_STOP);
+    var $window = $(window);
+    var onScroll = function () {
+      var scrollTop = $window.scrollTop();
+      this.parallaxerCore.setTargetScrollPosition(scrollTop);
+    }.bind(this);
 
-    areAllElementsInitialized = false;
-
-    isSmoothScrollEnabled = false;
-
-    looper = new Looper(onLoopFrame);
-  });
-  
-  /*
-   * 
-   * Public methods
-   *
-   */
-
-  /*
-   * Registers event listener for given event type.
-   */
-  this.addEventListener = function(type, listener) {
-    eventsManager.addEventListener(type, listener);
+    $window.on('scroll.andrzejdus-parallaxer', onScroll);
+    this.parallaxerCore.refresh();
   };
 
-  /*
-   * Unregisters given event listener for given event type.
-   */
-  this.removeEventListener = function(type, listener) {
-    eventsManager.removeEventListener(type, listener);
+  Parallaxer.prototype.getCore = function () {
+    return this.parallaxerCore;
   };
 
-  /*
-   * Registers DOM element to be scrolled by parallaxer.
-   *
-   * Arguments control scrolling parameters for element.
-   */
-  this.addElement = function(element, speed, scrollOffset, type) {
-    var object = null;
+  Parallaxer.prototype.stop = function () {
+    var $window = $(window);
+    $window.off('scroll.andrzejdus-parallaxer');
 
-    if (element) {
-      // TODO shouldn't this object have definition?
-      object = {
-          'id': objects.length,
-          'element': element,
-          'speed': speed,
-          'type': type,
-          'scrollOffset': scrollOffset
-      };
-      
-      objects.push(object);
-    }
+    var transformPropertyName = Modernizr.prefixed('transform');
 
-    areAllElementsInitialized = false;
+    for (var i = 0; i < this.layers.length; i++) {
+      var layer = this.layers[i];
 
-    return object;
-  };
-
-  this.refresh = function() {
-    draw(0, true);
-  };
-
-  /*
-   * Returns current smooth scroll state.
-   */
-  this.isSmoothScrollEnabled = function() {
-    return isSmoothScrollEnabled;
-  };
-
-  /*
-   * Enables or disables smooth scroll.
-   */
-  this.setSmoothScrollEnabled = function(value) {
-    isSmoothScrollEnabled = value;
-  };
-
-  /*
-   * Gets current scroll position, i.e. position on which registered elements were last drawn.
-   */
-  this.getCurrentScrollPosition = function() {
-    return currentScrollPosition;
-  };
-
-  /*
-   * Gets target scroll position, i.e. position to which elements are scrolled.
-   */
-  this.getTargetScrollPosition = function() {
-    return targetScrollPosition;
-  };
-
-  /*
-   * Sets target scroll position, i.e. position to which elements are scrolled.
-   */
-  this.setTargetScrollPosition = function(value) {
-    if (targetScrollPosition !== value) {
-      targetScrollPosition = value;
-
-      eventsManager.dispatch(ParallaxerEvent.TARGET_POSITION_CHANGED,
-          new ParallaxerEvent(this));
-
-      if (areAllElementsInitialized) {
-        looper.start();
+      if (layer.autoCss) {
+        layer.$element.css({'position': '', 'top': ''});
+        layer.element.style[transformPropertyName] = '';
       }
     }
   };
 
-  /*
-   * Sets callback that gets executed on every frame draw.
-   */
-  this.setLoopFrameHook = function(callback) {
-      onLoopFrameHook = callback;
-  };
+  namespace.Parallaxer = new Parallaxer();
+}(andrzejdus.parallaxer));
 
-  /*
-   *
-   * Private methods
-   *
-   */
-
-  var initializeObjects = function() {
-    for (var key in objects) {
-      var object = objects[key];
-      var element = object.element;
-
-      var initialVisiblePosition = 0;
-      var elementCssPosition =
-          Utils.getComputedStyle(element, object.type == Parallaxer.HORIZONTAL ? 'left' : 'top');
-      if (elementCssPosition !== 'auto') {
-        initialVisiblePosition += Number(elementCssPosition.replace(/px/, ''));
-        element.style[object.type == Parallaxer.HORIZONTAL ? 'left' : 'top'] = '0';
-      }
-      
-      object['initialVisiblePosition'] = initialVisiblePosition;
-
-      drawer.addObject(
-          object.id,
-          element,
-          object.type === Parallaxer.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
-          0
-      );
-    }
-  };
-
-  var onLoopFrame = Utils.delegate(this, function(deltaTime) {
-    var hasChanged = draw(deltaTime, false);
-
-    // stops loop if nothing has changed in last frame
-    if (hasChanged === false) {
-      looper.stop();
-      eventsManager.dispatch(ParallaxerEvent.AFTER_LOOP_STOP,
-          new ParallaxerEvent(this));
-    }
-
-    if (onLoopFrameHook) {
-        onLoopFrameHook(deltaTime);
-    }
-  });
-
-  var draw = Utils.delegate(this, function(deltaTime, forceUpdate) {
-    var deltaPosition = targetScrollPosition - currentScrollPosition;
-    var absDeltaPosition = Math.abs(deltaPosition);
-
-    var hasChanged = false;
-    if (absDeltaPosition > 0.2 || forceUpdate) {
-      if (areAllElementsInitialized === false) {
-        initializeObjects();
-      }
-
-      hasChanged = true;
-
-      if (isSmoothScrollEnabled) {
-        var change = deltaPosition / 30 * (deltaTime / (1000 / 60));
-        
-        if (Math.abs(change) < 1) {
-          change = (change > 0 ? 1 : -1) * 1;
-        }
-        currentScrollPosition += change;
-        
-        if (absDeltaPosition - Math.abs(change) < 0) {
-          currentScrollPosition = targetScrollPosition;
-        }
-      }
-      else {
-        currentScrollPosition = targetScrollPosition;
-      }
-      
-      eventsManager.dispatch(ParallaxerEvent.CURRENT_POSITION_CHANGED,
-          new ParallaxerEvent(this));
-
-      drawer.startFrame();
-      updateOffsets(currentScrollPosition);
-      drawer.draw();
-
-      if (areAllElementsInitialized === false) {
-        areAllElementsInitialized = true;
-
-        eventsManager.dispatch(ParallaxerEvent.AFTER_FIRST_DRAW,
-            new ParallaxerEvent(this));
-      }
-    }
-    
-    return hasChanged;
-  });
-
-  var updateOffsets = function(newScrollPosition) {
-    for (var key in objects) {
-      var object = objects[key];
-      
-      var offset = Math.floor(
-          object.initialVisiblePosition +
-          (object.scrollOffset - newScrollPosition) * object.speed
-      );
-      
-      drawer.updateOffset(object.id, offset);
-    }
-  };
-
-  construct();
-};
-
-Parallaxer.HORIZONTAL = 'horizontal';
-Parallaxer.VERTICAL = 'vertical';
+goog.exportSymbol('andrzejdus.parallaxer.Parallaxer', andrzejdus.parallaxer.Parallaxer);
