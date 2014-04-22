@@ -36,7 +36,7 @@ module.exports = function (grunt) {
       options: {
         closureLibraryPath: 'custom_components/closure-library-20130212-95c19e7f0f5f', // path to closure library
         inputs: 'src/Parallaxer.js',
-        compilerFile: 'bin/compiler-20130411/compiler.jar', // path to closure compiler
+        compilerFile: 'bin/compiler-20140407/compiler.jar', // path to closure compiler
         compile: true, // boolean
         compilerOpts: {
           define: ["'andrzejdus.DEBUG=false'"],
