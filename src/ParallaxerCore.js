@@ -102,26 +102,25 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
      * Arguments control scrolling parameters for element.
      */
     this.addElement = function (element, speed, scrollOffset, type) {
-      var object = null;
+      if (element === undefined) {
+        return null;
+      }
 
-      if (element) {
-        // TODO shouldn't this object have definition?
-        object = {
-          'id': objects.length,
-          'element': element,
-          'speed': speed,
-          'type': type,
-          'scrollOffset': scrollOffset
-        };
+      var object = {
+        'id': objects.length,
+        'element': element,
+        'speed': speed,
+        'type': type,
+        'scrollOffset': scrollOffset
+      };
 
-        objects.push(object);
-        drawer.addObject(
+      objects.push(object);
+      drawer.addObject(
           object.id,
           element,
           object.type === ParallaxerCore.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
           0
-        );
-      }
+      );
 
       return object;
     };
