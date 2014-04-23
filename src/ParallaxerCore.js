@@ -197,7 +197,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       if (onLoopFrameHook) {
         onLoopFrameHook(deltaTime);
       }
-    }.bind(this);
+    };
 
     var draw = function (deltaTime, forceUpdate) {
       var deltaPosition = targetScrollPosition - currentScrollPosition;
@@ -239,7 +239,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       }
 
       return hasChanged;
-    }.bind(this);
+    };
 
     var updateOffsets = function (newScrollPosition) {
       for (var key in objects) {
