@@ -33,74 +33,84 @@ andrzejdus.DEBUG = true;
   "use strict";
 
   var Parallaxer = function () {
-    this.isSmoothScrollEnabled = false;
-    this.layers = [];
-    this.parallaxerCore = new andrzejdus.parallaxer.ParallaxerCore();
-  };
+    var isSmoothScrollEnabled = false;
+    var layers;
+    var parallaxerCore = new andrzejdus.parallaxer.ParallaxerCore();
 
-  Parallaxer.prototype.setSmoothScrollEnabled = function (value) {
-    this.isSmoothScrollEnabled = value;
-  };
+    /*
+     *
+     * Public methods
+     *
+     */
 
-  Parallaxer.prototype.init = function () {
-    this.parallaxerCore.setSmoothScrollEnabled(this.isSmoothScrollEnabled);
+    var init = function () {
+      parallaxerCore.setSmoothScrollEnabled(isSmoothScrollEnabled);
+      layers = [];
 
-    this.layers = [];
-    var self = this;
-    $('[data-type="parallaxer-layer"]').each(function () {
-      var $element = $(this);
-      self.layers.push({
-        element: this,
-        $element: $element,
-        initialElementOffsetTop: $element.offset().top,
-        offsetTop: parseInt($element.data('parallaxer-offset-top'), 10) || 0,
-        speed: $element.data('parallaxer-speed'),
-        // we cannot use data here because it coerces 'false' string and no value to boolean false
-        autoCss: $element.attr('data-parallaxer-auto-css') !== 'false'
+      $('[data-type="parallaxer-layer"]').each(function () {
+        var $element = $(this);
+        layers.push({
+          element: this,
+          $element: $element,
+          initialElementOffsetTop: $element.offset().top,
+          offsetTop: parseInt($element.data('parallaxer-offset-top'), 10) || 0,
+          speed: $element.data('parallaxer-speed'),
+          // we cannot use data here because it coerces 'false' string and no value to boolean false
+          autoCss: $element.attr('data-parallaxer-auto-css') !== 'false'
+        });
       });
-    });
 
-    for (var i = 0; i < this.layers.length; i++) {
-      var layer = this.layers[i];
+      for (var i = 0; i < layers.length; i++) {
+        var layer = layers[i];
 
-      if (layer.autoCss) {
-        layer.$element.css({'position': 'fixed', 'top': '0px'});
+        if (layer.autoCss) {
+          layer.$element.css({'position': 'fixed', 'top': '0px'});
+        }
+        parallaxerCore.addElement(
+          layer.element,
+          layer.speed,
+          layer.initialElementOffsetTop,
+          andrzejdus.parallaxer.ParallaxerCore.VERTICAL);
       }
-      this.parallaxerCore.addElement(
-        layer.element,
-        layer.speed,
-        layer.initialElementOffsetTop,
-        andrzejdus.parallaxer.ParallaxerCore.VERTICAL);
-    }
 
-    var $window = $(window);
-    var onScroll = function () {
-      var scrollTop = $window.scrollTop();
-      this.parallaxerCore.setTargetScrollPosition(scrollTop);
-    }.bind(this);
+      var $window = $(window);
+      var onScroll = function () {
+        var scrollTop = $window.scrollTop();
+        parallaxerCore.setTargetScrollPosition(scrollTop);
+      };
 
-    $window.on('scroll.andrzejdus-parallaxer', onScroll);
-    this.parallaxerCore.refresh();
-  };
+      $window.on('scroll.andrzejdus-parallaxer', onScroll);
+      parallaxerCore.refresh();
+    };
 
-  Parallaxer.prototype.getCore = function () {
-    return this.parallaxerCore;
-  };
+    var stop = function () {
+      var $window = $(window);
+      $window.off('scroll.andrzejdus-parallaxer');
 
-  Parallaxer.prototype.stop = function () {
-    var $window = $(window);
-    $window.off('scroll.andrzejdus-parallaxer');
+      var transformPropertyName = Modernizr.prefixed('transform');
 
-    var transformPropertyName = Modernizr.prefixed('transform');
+      for (var i = 0; i < layers.length; i++) {
+        var layer = layers[i];
 
-    for (var i = 0; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-
-      if (layer.autoCss) {
-        layer.$element.css({'position': '', 'top': ''});
-        layer.element.style[transformPropertyName] = '';
+        if (layer.autoCss) {
+          layer.$element.css({'position': '', 'top': ''});
+          layer.element.style[transformPropertyName] = '';
+        }
       }
-    }
+    };
+
+    var setSmoothScrollEnabled = function (value) {
+      isSmoothScrollEnabled = value;
+    };
+
+    var getCore = function () {
+      return parallaxerCore;
+    };
+
+    this.init = init;
+    this.stop = stop;
+    this.setSmoothScrollEnabled = setSmoothScrollEnabled;
+    this.getCore = getCore;
   };
 
   namespace.Parallaxer = new Parallaxer();

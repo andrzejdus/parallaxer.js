@@ -31,7 +31,13 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
   var Cache = function (onCreate) {
     var cache = {};
 
-    this.get = function (key) {
+    /*
+     *
+     * Public methods
+     *
+     */
+
+    var get = function (key) {
       var cachedObject = cache[key];
 
       if (!cachedObject) {
@@ -42,6 +48,8 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
       return cachedObject;
     };
+
+    this.get = get;
   };
 
   namespace.Cache = Cache;

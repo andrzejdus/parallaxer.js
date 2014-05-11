@@ -85,14 +85,14 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
     /*
      * Registers event listener for given event type.
      */
-    this.addEventListener = function (type, listener) {
+    var addEventListener = function (type, listener) {
       eventsManager.addEventListener(type, listener);
     };
 
     /*
      * Unregisters given event listener for given event type.
      */
-    this.removeEventListener = function (type, listener) {
+    var removeEventListener = function (type, listener) {
       eventsManager.removeEventListener(type, listener);
     };
 
@@ -101,66 +101,67 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
      *
      * Arguments control scrolling parameters for element.
      */
-    this.addElement = function (element, speed, scrollOffset, type) {
-      if (element === undefined) {
-        return null;
-      }
+    var addElement = function (element, speed, scrollOffset, type) {
+      var object = null;
 
-      var object = {
-        'id': objects.length,
-        'element': element,
-        'speed': speed,
-        'type': type,
-        'scrollOffset': scrollOffset
-      };
+      if (element) {
+        // TODO shouldn't this object have definition?
+        object = {
+          'id': objects.length,
+          'element': element,
+          'speed': speed,
+          'type': type,
+          'scrollOffset': scrollOffset
+        };
 
-      objects.push(object);
-      drawer.addObject(
+        objects.push(object);
+        drawer.addObject(
           object.id,
           element,
           object.type === ParallaxerCore.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
           0
-      );
+        );
+      }
 
       return object;
     };
 
-    this.refresh = function () {
+    var refresh = function () {
       draw(0, true);
     };
 
     /*
      * Returns current smooth scroll state.
      */
-    this.isSmoothScrollEnabled = function () {
+    var isSmoothScrollEnabled = function () {
       return isSmoothScrollEnabled;
     };
 
     /*
      * Enables or disables smooth scroll.
      */
-    this.setSmoothScrollEnabled = function (value) {
+    var setSmoothScrollEnabled = function (value) {
       isSmoothScrollEnabled = value;
     };
 
     /*
      * Gets current scroll position, i.e. position on which registered elements were last drawn.
      */
-    this.getCurrentScrollPosition = function () {
+    var getCurrentScrollPosition = function () {
       return currentScrollPosition;
     };
 
     /*
      * Gets target scroll position, i.e. position to which elements are scrolled.
      */
-    this.getTargetScrollPosition = function () {
+    var getTargetScrollPosition = function () {
       return targetScrollPosition;
     };
 
     /*
      * Sets target scroll position, i.e. position to which elements are scrolled.
      */
-    this.setTargetScrollPosition = function (value) {
+    var setTargetScrollPosition = function (value) {
       if (targetScrollPosition !== value) {
         targetScrollPosition = value;
 
@@ -174,7 +175,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
     /*
      * Sets callback that gets executed on every frame draw.
      */
-    this.setLoopFrameHook = function (callback) {
+    var setLoopFrameHook = function (callback) {
       onLoopFrameHook = callback;
     };
 
@@ -197,7 +198,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       if (onLoopFrameHook) {
         onLoopFrameHook(deltaTime);
       }
-    };
+    }.bind(this);
 
     var draw = function (deltaTime, forceUpdate) {
       var deltaPosition = targetScrollPosition - currentScrollPosition;
@@ -239,7 +240,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       }
 
       return hasChanged;
-    };
+    }.bind(this);
 
     var updateOffsets = function (newScrollPosition) {
       for (var key in objects) {
@@ -252,6 +253,17 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
     };
 
     construct();
+
+    this.addEventListener = addEventListener;
+    this.removeEventListener = removeEventListener;
+    this.addElement = addElement;
+    this.refresh = refresh;
+    this.isSmoothScrollEnabled = isSmoothScrollEnabled;
+    this.setSmoothScrollEnabled = setSmoothScrollEnabled;
+    this.getCurrentScrollPosition = getCurrentScrollPosition;
+    this.getTargetScrollPosition = getTargetScrollPosition;
+    this.setTargetScrollPosition = setTargetScrollPosition;
+    this.setLoopFrameHook = setLoopFrameHook;
   };
 
   ParallaxerCore.HORIZONTAL = 'horizontal';

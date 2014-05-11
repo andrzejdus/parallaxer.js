@@ -30,29 +30,36 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
   var DrawerObject = function (element, type, offset) {
     var isVisibleValue = true;
 
-    this.getElement = function () {
+    var getElement = function () {
       return element;
     };
 
-    this.getOffset = function () {
+    var getOffset = function () {
       return offset;
     };
 
-    this.setOffset = function (value) {
+    var setOffset = function (value) {
       offset = value;
     };
 
-    this.getType = function () {
+    var getType = function () {
       return type;
     };
 
-    this.isVisible = function () {
+    var isVisible = function () {
       return isVisibleValue;
     };
 
-    this.updateVisibility = function (value) {
+    var updateVisibility = function (value) {
       isVisibleValue = value;
     };
+
+    this.getElement = getElement;
+    this.getOffset = getOffset;
+    this.setOffset = setOffset;
+    this.getType = getType;
+    this.isVisible = isVisible;
+    this.updateVisibility = updateVisibility;
   };
 
   DrawerObject.HORIZONTAL = 'horizontal';

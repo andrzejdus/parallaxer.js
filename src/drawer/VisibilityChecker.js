@@ -31,12 +31,18 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
     var windowTop = null;
     var windowBottom = null;
 
-    var construct = Utils.delegate(this, function () {
+    var construct = function () {
       updateWindowBounds();
       $(window).on('resize', onResize);
-    });
+    };
 
-    this.isVisible = function (top, bottom) {
+    /*
+     *
+     * Public methods
+     *
+     */
+
+    var isVisible = function (top, bottom) {
       var isVisible = false;
 
       if ((top >= windowTop && top <= windowBottom) ||
@@ -48,6 +54,12 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       return isVisible;
     };
 
+    /*
+     *
+     * Private methods
+     *
+     */
+
     var onResize = function () {
       updateWindowBounds();
     };
@@ -58,6 +70,8 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
     };
 
     construct();
+
+    this.isVisible = isVisible;
   };
 
   namespace.VisibilityChecker = VisibilityChecker;

@@ -51,17 +51,23 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       });
     });
 
-    this.addObject = function (id, element, type, offset) {
+    /*
+     *
+     * Public methods
+     *
+     */
+
+    var addObject = function (id, element, type, offset) {
       stateObjects[id] = new DrawerObject(element, type, offset);
 
       stateObjectsToRedraw = {};
     };
 
-    this.startFrame = function () {
+    var startFrame = function () {
       stateObjectsToRedraw = {};
     };
 
-    this.updateOffset = function (id, newOffset) {
+    var updateOffset = function (id, newOffset) {
       var stateObject = stateObjects[id];
       if (stateObject) {
         stateObject.setOffset(newOffset);
@@ -77,7 +83,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       }
     };
 
-    this.draw = Utils.delegate(this, function () {
+    var draw = function () {
       for (var id in stateObjectsToRedraw) {
         var stateObject = stateObjectsToRedraw[id];
 
@@ -90,9 +96,14 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
             '(' + stateObject.getOffset() + 'px)';
         }
       }
-    });
+    };
 
     construct();
+
+    this.addObject = addObject;
+    this.startFrame = startFrame;
+    this.updateOffset = updateOffset;
+    this.draw = draw;
   };
 
   namespace.Drawer = Drawer;
