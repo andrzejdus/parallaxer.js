@@ -15,6 +15,8 @@ Download the minified library (can be found in dist directory) and include it in
 <script src="parallaxer.min.js"></script>
 ```
 
+For usage example look to tests/parallaxer_1/src/index.html (step by step instructions comming soon).
+
 ### Building
 
 Prerequisites:
