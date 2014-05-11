@@ -13,9 +13,14 @@
   "license": "Apache 2.0",
   "ignore": [
     "**/.*",
+    "Gruntfile.js",
+    "package.json",
     "bin",
     "bower_components",
+    "custom_components",
+    "libs",
     "node_modules",
+    "src",
     "test",
     "tests"
   ],
