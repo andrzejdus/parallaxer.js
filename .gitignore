@@ -1,3 +1,6 @@
+# .gitignore general
+# version 1
+
 # Compiled source #
 ###################
 *.com
@@ -46,6 +49,7 @@ Thumbs.db
 *.class
 
 # Package Files #
+######################
 *.war
 *.ear
 
