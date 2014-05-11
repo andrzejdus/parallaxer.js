@@ -1,0 +1,26 @@
+{
+  "name": "parallaxer.js",
+  "version": "0.1.28",
+  "homepage": "https://github.com/andrzejdus/parallaxer.js",
+  "authors": [
+    "Andrzej Duś <andrzej.dus@gmail.com>"
+  ],
+  "description": "HTML/JavaScript parallaxe effect library developed for boy-coy.com",
+  "main": "dist/parallaxer.min.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "Apache 2.0",
+  "ignore": [
+    "**/.*",
+    "bin",
+    "bower_components",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.9.0",
+    "modernizr": "~2.7.1"
+  }
+}
