@@ -36,6 +36,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
   /** @constructor */
   var ParallaxerCore = function (initialScrollPosition) {
+    // aliases for namespaced objects
     var ParallaxerCoreEvent = andrzejdus.parallaxer.ParallaxerCoreEvent;
     var Drawer = andrzejdus.parallaxer.Drawer;
     var DrawerObject = andrzejdus.parallaxer.DrawerObject;
@@ -45,7 +46,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
 
     var eventsManager;
 
-    var isSmoothScrollEnabled;
+    var smoothScrollEnabled;
     var isFirstDraw;
 
     var objects;
@@ -69,7 +70,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
       eventsManager.registerType(ParallaxerCoreEvent.AFTER_FIRST_DRAW);
       eventsManager.registerType(ParallaxerCoreEvent.AFTER_LOOP_STOP);
 
-      isSmoothScrollEnabled = false;
+      smoothScrollEnabled = false;
 
       objects = [];
       drawer = new Drawer();
@@ -102,26 +103,27 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
      * Arguments control scrolling parameters for element.
      */
     var addElement = function (element, speed, scrollOffset, type) {
-      var object = null;
+      if (element === undefined) {
+        return null;
+      }
 
-      if (element) {
-        // TODO shouldn't this object have definition?
-        object = {
-          'id': objects.length,
-          'element': element,
-          'speed': speed,
-          'type': type,
-          'scrollOffset': scrollOffset
-        };
+      var object = {
+        'id': objects.length,
+        'element': element,
+        'speed': speed,
+        'type': type,
+        'scrollOffset': scrollOffset
+      };
 
-        objects.push(object);
-        drawer.addObject(
+      objects.push(object);
+      drawer.addObject(
           object.id,
           element,
-          object.type === ParallaxerCore.HORIZONTAL ? DrawerObject.HORIZONTAL : DrawerObject.VERTICAL,
+          object.type === ParallaxerCore.HORIZONTAL ?
+              DrawerObject.HORIZONTAL :
+              DrawerObject.VERTICAL,
           0
-        );
-      }
+      );
 
       return object;
     };
@@ -134,7 +136,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
      * Returns current smooth scroll state.
      */
     var isSmoothScrollEnabled = function () {
-      return isSmoothScrollEnabled;
+      return smoothScrollEnabled;
     };
 
     /*
@@ -212,7 +214,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
           var change = deltaPosition / 30 * (deltaTime / (1000 / 60));
 
           if (Math.abs(change) < 1) {
-            change = (change > 0 ? 1 : -1) * 1;
+            change = change > 0 ? 1 : -1;
           }
           currentScrollPosition += change;
 
