@@ -32,6 +32,13 @@ andrzejdus.DEBUG = true;
 (function (namespace, undefined) {
   "use strict";
 
+  // constants
+  var DATA_PARALLAXER_NAME = 'parallaxer';
+  var DATA_OFFSET_TOP_NAME = 'parallaxer-offset-top';
+  var DATA_SPEED_NAME = 'parallaxer-speed';
+  var DATA_AUTO_CSS_NAME = 'parallaxer-auto-css';
+  var DATA_ORIENTATION_NAME = 'parallaxer-orientation';
+
   var Parallaxer = function () {
     var isSmoothScrollEnabled = false;
     var layers;
@@ -47,16 +54,18 @@ andrzejdus.DEBUG = true;
       parallaxerCore.setSmoothScrollEnabled(isSmoothScrollEnabled);
       layers = [];
 
-      $('[data-type="parallaxer-layer"]').each(function () {
+      var dataParallaxerSelector = '[data-' + DATA_PARALLAXER_NAME + '="enabled"]';
+      $(dataParallaxerSelector).each(function () {
         var $element = $(this);
         layers.push({
           element: this,
           $element: $element,
           initialElementOffsetTop: $element.offset().top,
-          offsetTop: parseInt($element.data('parallaxer-offset-top'), 10) || 0,
-          speed: $element.data('parallaxer-speed'),
+          offsetTop: parseInt($element.data(DATA_OFFSET_TOP_NAME), 10) || 0,
+          speed: $element.data(DATA_SPEED_NAME),
+          orientation: $element.data(DATA_ORIENTATION_NAME),
           // we cannot use data here because it coerces 'false' string and no value to boolean false
-          autoCss: $element.attr('data-parallaxer-auto-css') !== 'false'
+          autoCss: $element.attr('data-' + DATA_AUTO_CSS_NAME) !== 'false'
         });
       });
 
