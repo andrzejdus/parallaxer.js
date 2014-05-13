@@ -33,7 +33,7 @@ Having .js files in place you can include them in your HTML.
 Now you can add data attributes to HTML elements that will be parallaxed, e.g.:
 ```html
 <div data-parallaxer="enabled" data-parallaxer-speed="1"></div>
-<div data-parallaxer="enabled" data-parallaxer-speed="0.8"></div>
+<div data-parallaxer="enabled" data-parallaxer-speed="0.5"></div>
 ```
 Each element will create separate parallaxe layer. Value of *data-parallaxer-speed* argument will decide how fast each element will move relatively to normal scroll speed.
 
@@ -41,16 +41,16 @@ Because of the nature of this parallaxe library all elements have to be "paralla
 
 > Of course you can nest other elements in parallaxe enabled ones. 
 
-The last step is to call *init* method when HTML is loaded:
+The last step is to call *start* method when HTML is loaded:
 ```javascript
 $('document').ready(function () {
-    andrzejdus.parallaxer.Parallaxer.init();
+    andrzejdus.parallaxer.Parallaxer.start();
 });
 ```
 
 ### Example
 
-For complete usage example look to tests/parallaxer_1/src/index.html.
+For simple usage example look to example directory.
 
 ### Building
 

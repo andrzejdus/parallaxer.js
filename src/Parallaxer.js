@@ -50,7 +50,7 @@ andrzejdus.DEBUG = true;
      *
      */
 
-    var init = function () {
+    var start = function () {
       var pageHeight = $('body').height();
       $('body').height(pageHeight);
 
@@ -119,7 +119,7 @@ andrzejdus.DEBUG = true;
       return parallaxerCore;
     };
 
-    this.init = init;
+    this.start = start;
     this.stop = stop;
     this.setSmoothScrollEnabled = setSmoothScrollEnabled;
     this.getCore = getCore;
