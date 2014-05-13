@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <title>parallaxer.js - example</title>
+  <meta charset="utf-8"/>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/modernizr/modernizr.js"></script>
+  <script src="bower_components/parallaxer.js/dist/parallaxer.min.js"></script>
+</head>
+<body>
+<style>
+  body {
+    margin: 0;
+  }
+
+  #layer-1 {
+    width: 100%;
+    height: 1200px;
+    background-color: #f00;
+  }
+
+  #layer-2 {
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #0f0;
+  }
+</style>
+<script>
+  $('document').ready(function () {
+    andrzejdus.parallaxer.Parallaxer.init();
+  });
+</script>
+<div id="layer-1" data-parallaxer="enabled" data-parallaxer-speed="1">Layer 1</div>
+<div id="layer-2" data-parallaxer="enabled" data-parallaxer-speed="1.4">Layer 2</div>
+</body>
+</html>
