@@ -29,12 +29,20 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     bump: {
-      options: {},
       files: [
         'package.json',
         'bower.json'
-      ]
+      ],
+      options: {
+        onBumped: function (data) {
+          var currentFile = data.task.filesSrc[data.index];
+          if (/bower.json/.test(currentFile)) {
+            grunt.config('bumpedVersion' , data.version);
+          }
+        }
+      }
     },
+
     closureBuilder: {
       options: {
         closureLibraryPath: 'custom_components/closure-library-20130212-95c19e7f0f5f', // path to closure library
@@ -58,10 +66,11 @@ module.exports = function (grunt) {
         dest: buildDir + '/' + minifiedFilename
       }
     },
+
     concat: {
       options: {
         stripBanners: true,
-        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+        banner: '/*! <%= pkg.name %> - v<%= bumpedVersion %> - ' +
           '<%= grunt.template.today("yyyy-mm-dd") %> - <%= pkg.repository.url %> */'
       },
       dist: {

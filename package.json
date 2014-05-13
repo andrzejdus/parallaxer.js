@@ -1,6 +1,6 @@
 {
   "name": "parallaxer.js",
-  "version": "0.1.28",
+  "version": "0.1.34",
   "description": "HTML/JavaScript parallaxe effect library developed for boy-coy.com",
   "main": "dist/parallaxer.js",
   "directories": {
