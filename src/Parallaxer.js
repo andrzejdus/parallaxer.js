@@ -51,7 +51,9 @@ andrzejdus.DEBUG = true;
      */
 
     var init = function () {
-      parallaxerCore.setSmoothScrollEnabled(isSmoothScrollEnabled);
+      var pageHeight = $('body').height();
+      $('body').height(pageHeight);
+
       layers = [];
 
       var dataParallaxerSelector = '[data-' + DATA_PARALLAXER_NAME + '="enabled"]';
@@ -89,6 +91,7 @@ andrzejdus.DEBUG = true;
       };
 
       $window.on('scroll.andrzejdus-parallaxer', onScroll);
+      parallaxerCore.setSmoothScrollEnabled(isSmoothScrollEnabled);
       parallaxerCore.refresh();
     };
 
