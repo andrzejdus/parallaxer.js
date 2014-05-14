@@ -93,7 +93,7 @@ andrzejdus.parallaxer = andrzejdus.parallaxer || {};
           element.style[transformPropertyName] =
             'translate' +
             (stateObject.getType() === DrawerObject.HORIZONTAL ? 'X' : 'Y') +
-            '(' + stateObject.getOffset() + 'px)';
+            '(' + stateObject.getOffset() + 'px) translateZ(0px)';
         }
       }
     };

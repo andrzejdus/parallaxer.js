@@ -7,6 +7,9 @@ var Main = function () {
     andrzejdus.parallaxer.Parallaxer.setSmoothScrollEnabled(true);
     andrzejdus.parallaxer.Parallaxer.start();
   });
+  $('body').click(function () {
+
+  });
 };
 
 goog.exportSymbol('Main', Main);
