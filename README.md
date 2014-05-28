@@ -1,7 +1,7 @@
 parallaxer.js
 ==========
 
-HTML/JavaScript smooth parallaxe effect library orginally developed for [Boy-Coy](http://boy-coy.com)
+HTML/JavaScript smooth parallaxe effect library orginally developed for [Boy-Coy](http://boy-coy.com).
 
 > This library is under development. API may change.
 
