@@ -10,6 +10,7 @@ HTML/JavaScript smooth parallaxe effect library orginally developed for [Boy-Coy
 #### Dependences
 * jQuery
 * Modernizr
+* requestAnimationFrame polyfill (for older browsers only)
 
 #### Download
 

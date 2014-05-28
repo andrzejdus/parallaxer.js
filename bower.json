@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "jquery": ">= 1.9.0",
-    "modernizr": "~2.7.1"
+    "modernizr": "~2.7.1",
+    "raf.js": "~0.0.4"
   }
 }
